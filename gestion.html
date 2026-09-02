@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestion des domaines : Les Bourguignols</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%231e1a17'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' font-style='italic' fill='%23f4efe4' text-anchor='middle'%3EB%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/gestion.css">
+</head>
+<body class="lg">
+
+  <header class="lg-top">
+    <div class="lg-top__brand">
+      <img src="images/logo-noir.svg" alt="Les Bourguignols" width="96" height="55">
+      <div>
+        <strong>Gestion des domaines</strong>
+        <span>Module autogéré · ajouter, modifier, retirer</span>
+      </div>
+    </div>
+    <div class="lg-top__actions">
+      <span class="lg-status" id="lg-status">Tout est enregistré</span>
+      <a class="lg-btn lg-btn--ghost" href="index.html" target="_blank" rel="noopener">Voir le site ↗</a>
+      <button class="lg-btn lg-btn--primary" id="lg-save" type="button">Enregistrer</button>
+    </div>
+  </header>
+
+  <div class="lg-notice">
+    <b>Mode démonstration.</b> Ce que vous changez ici s'affiche tout de suite sur le site, dans ce navigateur. Dans la version finale sur WordPress, cet écran devient le tableau de bord de l'agence (menu « Domaines »), avec exactement les mêmes champs, et les changements sont visibles par tout le monde.
+  </div>
+
+  <div class="lg-layout">
+
+    <!-- Colonne de gauche : la liste -->
+    <aside class="lg-list">
+      <div class="lg-list__head">
+        <input type="search" id="lg-filter" placeholder="Filtrer la liste" aria-label="Filtrer la liste des domaines">
+        <button class="lg-btn lg-btn--primary lg-btn--block" id="lg-add" type="button">+ Ajouter un domaine</button>
+      </div>
+      <p class="lg-list__hint">Du nord au sud. Utilisez les flèches de la fiche pour changer l'ordre.</p>
+      <ol class="lg-items" id="lg-items"></ol>
+      <div class="lg-list__foot">
+        <button class="lg-link" id="lg-export" type="button">Exporter le fichier de données</button>
+        <button class="lg-link lg-link--danger" id="lg-reset" type="button">Rétablir la version d'origine</button>
+      </div>
+    </aside>
+
+    <!-- Colonne de droite : la fiche -->
+    <main class="lg-editor" id="lg-editor">
+      <div class="lg-empty" id="lg-empty">
+        <h2>Choisissez un domaine dans la liste</h2>
+        <p>ou ajoutez-en un nouveau. Chaque fiche contient les informations du domaine et la liste de ses cuvées.</p>
+      </div>
+
+      <form class="lg-form" id="lg-form" hidden autocomplete="off">
+        <div class="lg-form__head">
+          <div>
+            <p class="lg-eyebrow" id="lg-form-eyebrow">Domaine</p>
+            <h2 id="lg-form-title">Nouveau domaine</h2>
+          </div>
+          <div class="lg-order">
+            <span>Position</span>
+            <button type="button" class="lg-icon" id="lg-up" title="Monter (vers le nord)">↑</button>
+            <b id="lg-order-n">01</b>
+            <button type="button" class="lg-icon" id="lg-down" title="Descendre (vers le sud)">↓</button>
+          </div>
+        </div>
+
+        <div class="lg-grid">
+          <label class="span2">Nom du domaine <input name="nom" required placeholder="Domaine …"></label>
+          <label>Village <input name="village" placeholder="Meursault"></label>
+          <label>Région <select name="region" id="lg-region"></select></label>
+          <label>Sous-région <input name="sousRegion" placeholder="Montagne de Reims (facultatif)"></label>
+          <label>Vigneron ou vigneronne <input name="vigneron" placeholder="Prénom Nom (rôle)"></label>
+          <label>Depuis <input name="fondation" placeholder="1949"></label>
+          <label>Surface <input name="surface" placeholder="6 ha"></label>
+          <label>Culture
+            <select name="pratique">
+              <option value="">Non précisé</option>
+              <option>lutte raisonnée</option>
+              <option>en conversion biologique</option>
+              <option>biologique certifié</option>
+              <option>biodynamie</option>
+            </select>
+          </label>
+          <label>Site web <input name="site" type="url" placeholder="https://"></label>
+          <label class="span2">Phrase de signature <input name="signature" placeholder="Une phrase qui résume le style de la maison"></label>
+          <label class="span2">Présentation <textarea name="description" rows="4" placeholder="Deux ou trois phrases sur le domaine"></textarea></label>
+          <label class="lg-check span2"><input type="checkbox" name="visible"> Afficher ce domaine sur le site</label>
+        </div>
+
+        <div class="lg-photo">
+          <div class="lg-photo__preview"><img id="lg-photo-img" alt=""></div>
+          <div class="lg-photo__actions">
+            <p class="lg-eyebrow">Photo de la fiche</p>
+            <p class="lg-help">Format paysage, 1 200 px de large ou plus. La photo est redimensionnée automatiquement.</p>
+            <label class="lg-btn lg-btn--ghost">Choisir une photo <input type="file" id="lg-photo-file" accept="image/*" hidden></label>
+            <button type="button" class="lg-link" id="lg-photo-remove">Retirer la photo</button>
+          </div>
+        </div>
+
+        <section class="lg-wines">
+          <div class="lg-wines__head">
+            <div>
+              <p class="lg-eyebrow">Les cuvées</p>
+              <h3 id="lg-wines-count">0 cuvée</h3>
+            </div>
+            <button type="button" class="lg-btn lg-btn--ghost" id="lg-wine-add">+ Ajouter une cuvée</button>
+          </div>
+          <div class="lg-wines__cols"><span>Nom</span><span>Appellation</span><span>Couleur</span><span>Cépage</span><span>Note</span><span></span></div>
+          <div id="lg-wines"></div>
+        </section>
+
+        <div class="lg-form__foot">
+          <button type="button" class="lg-link lg-link--danger" id="lg-delete">Retirer ce domaine</button>
+          <div>
+            <a class="lg-btn lg-btn--ghost" id="lg-view" href="index.html" target="_blank" rel="noopener">Voir la fiche sur le site ↗</a>
+            <button type="submit" class="lg-btn lg-btn--primary">Enregistrer</button>
+          </div>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <div class="lg-toast" id="lg-toast" hidden></div>
+
+  <script src="js/domaines-data.js"></script>
+  <script src="js/gestion.js"></script>
+</body>
+</html>

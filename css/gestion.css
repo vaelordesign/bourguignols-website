@@ -1,0 +1,110 @@
+/* Module de gestion (démonstration) : Les Bourguignols */
+.lg {
+  --paper: #f4efe4; --paper-2: #ece5d5; --ink: #1e1a17; --ink-2: #4b433d; --ink-3: #7d736b; --vin: #5c1d2e; --vin-2: #7a2a40; --or: #b08d57;
+  --filet: rgba(30, 26, 23, .22); --filet-2: rgba(30, 26, 23, .1); --ok: #2f6b3a; --danger: #a12a2a;
+  --serif: "Cormorant Garamond", Garamond, serif; --sans: "Karla", "Helvetica Neue", Arial, sans-serif;
+  margin: 0; background: var(--paper-2); color: var(--ink); font-family: var(--sans); font-size: 14.5px; line-height: 1.5; -webkit-font-smoothing: antialiased;
+}
+.lg *, .lg *::before, .lg *::after { box-sizing: border-box; }
+.lg [hidden] { display: none !important; }
+.lg h2, .lg h3 { font-family: var(--serif); font-weight: 500; margin: 0; line-height: 1.1; }
+.lg-eyebrow { font-size: 10.5px; letter-spacing: .22em; text-transform: uppercase; color: var(--vin); font-weight: 700; margin: 0 0 4px; }
+.lg-help { font-size: 12.5px; color: var(--ink-3); margin: 0 0 10px; }
+
+.lg-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 16px; border: 1px solid var(--ink); background: transparent; color: var(--ink); font: inherit; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; cursor: pointer; text-decoration: none; border-radius: 0; transition: background .2s, color .2s; }
+.lg-btn:hover { background: var(--ink); color: var(--paper); }
+.lg-btn--primary { background: var(--vin); border-color: var(--vin); color: #fff; }
+.lg-btn--primary:hover { background: var(--vin-2); border-color: var(--vin-2); }
+.lg-btn--ghost { border-color: var(--filet); }
+.lg-btn--block { width: 100%; }
+.lg-link { background: none; border: 0; padding: 0; font: inherit; font-size: 13px; color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.lg-link:hover { color: var(--vin); }
+.lg-link--danger { color: var(--danger); }
+.lg-icon { width: 30px; height: 30px; border: 1px solid var(--filet); background: var(--paper); font: inherit; font-size: 15px; cursor: pointer; }
+.lg-icon:hover { background: var(--ink); color: var(--paper); }
+
+.lg-top { position: sticky; top: 0; z-index: 10; background: var(--paper); border-bottom: 1px solid var(--filet); display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 12px 24px; }
+.lg-top__brand { display: flex; align-items: center; gap: 14px; }
+.lg-top__brand img { width: 96px; height: auto; }
+.lg-top__brand strong { display: block; font-family: var(--serif); font-size: 22px; font-weight: 500; line-height: 1; }
+.lg-top__brand span { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); }
+.lg-top__actions { display: flex; align-items: center; gap: 12px; }
+.lg-status { font-size: 12px; color: var(--ok); font-weight: 600; }
+.lg-status.is-dirty { color: var(--vin); }
+.lg-notice { margin: 16px 24px 0; padding: 12px 16px; background: #fff7e3; border: 1px solid #e9d6a8; font-size: 13px; color: var(--ink-2); }
+
+.lg-layout { display: grid; grid-template-columns: 340px 1fr; gap: 20px; padding: 20px 24px 60px; align-items: start; }
+.lg-list { background: var(--paper); border: 1px solid var(--filet); position: sticky; top: 76px; max-height: calc(100vh - 96px); display: flex; flex-direction: column; }
+.lg-list__head { padding: 14px; display: grid; gap: 10px; border-bottom: 1px solid var(--filet-2); }
+.lg-list__head input { font: inherit; padding: 9px 11px; border: 1px solid var(--filet); background: #fff; width: 100%; }
+.lg-list__hint { font-size: 12px; color: var(--ink-3); margin: 10px 14px 4px; }
+.lg-items { list-style: none; margin: 0; padding: 0 6px 6px; overflow-y: auto; flex: 1; }
+.lg-item { display: grid; grid-template-columns: 34px 1fr auto; gap: 10px; align-items: center; padding: 9px 10px; cursor: pointer; border-bottom: 1px solid var(--filet-2); }
+.lg-item:hover { background: var(--paper-2); }
+.lg-item.is-active { background: var(--ink); color: var(--paper); }
+.lg-item__n { font-family: var(--serif); font-size: 17px; font-weight: 600; color: var(--vin); }
+.lg-item.is-active .lg-item__n { color: var(--or); }
+.lg-item__name { font-family: var(--serif); font-size: 17px; line-height: 1.1; }
+.lg-item__where { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+.lg-item.is-active .lg-item__where { color: rgba(244, 239, 228, .7); }
+.lg-item__badge { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; border: 1px solid currentColor; padding: 2px 6px; color: var(--ink-3); }
+.lg-list__foot { padding: 12px 14px; border-top: 1px solid var(--filet-2); display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+
+.lg-editor { background: var(--paper); border: 1px solid var(--filet); min-height: 400px; }
+.lg-empty { padding: 80px 30px; text-align: center; color: var(--ink-3); }
+.lg-empty h2 { font-size: 30px; color: var(--ink-2); margin-bottom: 8px; }
+.lg-form { padding: 24px 28px 28px; }
+.lg-form__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--filet); }
+.lg-form__head h2 { font-size: 34px; }
+.lg-order { display: flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); }
+.lg-order b { font-family: var(--serif); font-size: 24px; color: var(--vin); min-width: 34px; text-align: center; }
+.lg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px; }
+.lg-grid .span2 { grid-column: 1 / -1; }
+.lg-grid label, .lg-wine label { display: grid; gap: 5px; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-3); font-weight: 700; }
+.lg input, .lg select, .lg textarea { font: inherit; font-size: 14.5px; letter-spacing: 0; text-transform: none; font-weight: 400; color: var(--ink); padding: 9px 11px; border: 1px solid var(--filet); background: #fff; width: 100%; border-radius: 0; }
+.lg input:focus, .lg select:focus, .lg textarea:focus { outline: 2px solid var(--vin); outline-offset: 1px; }
+.lg textarea { resize: vertical; }
+.lg-check { display: flex !important; align-items: center; gap: 10px; text-transform: none !important; letter-spacing: 0 !important; font-size: 14px !important; font-weight: 500 !important; color: var(--ink) !important; }
+.lg-check input { width: 18px; height: 18px; }
+
+.lg-photo { display: grid; grid-template-columns: 300px 1fr; gap: 20px; align-items: center; margin: 24px 0; padding: 18px; border: 1px solid var(--filet-2); background: var(--paper-2); }
+.lg-photo__preview { aspect-ratio: 3 / 2; background: #e2d9c6; overflow: hidden; }
+.lg-photo__preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.lg-photo__actions { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+
+.lg-wines { margin-top: 10px; }
+.lg-wines__head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 10px; }
+.lg-wines__head h3 { font-size: 26px; }
+.lg-wines__cols, .lg-wine { display: grid; grid-template-columns: 1.4fr 1.4fr 120px 1fr 1.6fr 64px; gap: 8px; align-items: center; }
+.lg-wines__cols { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-3); font-weight: 700; padding: 6px 0; border-bottom: 1px solid var(--filet); }
+.lg-wine { padding: 8px 0; border-bottom: 1px solid var(--filet-2); }
+.lg-wine input, .lg-wine select { padding: 7px 9px; font-size: 13.5px; }
+.lg-wine__tools { display: flex; gap: 4px; justify-content: flex-end; }
+.lg-wine__tools button { width: 28px; height: 28px; border: 1px solid var(--filet); background: #fff; cursor: pointer; font-size: 13px; }
+.lg-wine__tools button:hover { background: var(--ink); color: #fff; }
+.lg-wine__tools .del:hover { background: var(--danger); }
+.lg-wines__empty { padding: 18px 0; color: var(--ink-3); font-style: italic; }
+
+.lg-form__foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--filet); flex-wrap: wrap; }
+.lg-form__foot > div { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.lg-toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink); color: var(--paper); padding: 12px 20px; font-size: 13px; z-index: 50; box-shadow: 0 10px 30px rgba(0, 0, 0, .25); }
+
+@media (max-width: 1024px) {
+  .lg-layout { grid-template-columns: 1fr; }
+  .lg-list { position: static; max-height: 420px; }
+  .lg-photo { grid-template-columns: 1fr; }
+}
+@media (max-width: 767px) {
+  .lg-top { flex-wrap: wrap; padding: 10px 14px; }
+  .lg-top__actions { width: 100%; justify-content: space-between; }
+  .lg-notice { margin: 12px 14px 0; }
+  .lg-layout { padding: 14px 14px 40px; }
+  .lg-form { padding: 16px; }
+  .lg-grid { grid-template-columns: 1fr; }
+  .lg-wines__cols { display: none; }
+  .lg-wine { grid-template-columns: 1fr 1fr; padding: 12px 0; }
+  .lg-wine label::before { content: attr(data-l); }
+  .lg-wine__tools { grid-column: 1 / -1; justify-content: flex-start; }
+  .lg-form__head { flex-direction: column; }
+}

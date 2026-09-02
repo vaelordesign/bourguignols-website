@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Les Bourguignols : agence d'importation privée de vins fins, Montréal</title>
+  <meta name="description" content="Les Bourguignols représentent vingt-cinq domaines familiaux de Bourgogne, de Champagne, du Rhône et de Provence, en importation privée au Québec. Parcourez chaque domaine et ses cuvées.">
+  <meta property="og:title" content="Les Bourguignols : vingt-cinq domaines, du nord au sud">
+  <meta property="og:description" content="Agence d'importation privée de vins fins à Montréal. Bourgogne, Champagne, Rhône, Provence.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://vaelordesign.github.io/bourguignols-website/images/hero.jpg">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%235c1d2e'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' font-style='italic' fill='%23f4efe4' text-anchor='middle'%3EB%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="lb">
+
+  <!-- Oreille de journal -->
+  <div class="lb-topline">
+    <div class="wrap">
+      <span>Agence d'importation privée · Montréal</span>
+      <span>Vingt-cinq domaines, du nord au sud</span>
+      <a href="mailto:contact@lesbourguignols.com">contact@lesbourguignols.com</a>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <header class="lb-nav" id="lb-nav">
+    <div class="wrap">
+      <ul class="lb-nav__links lb-nav__links--left">
+        <li><a href="#domaines">Les domaines</a></li>
+        <li><a href="#une">L'itinéraire</a></li>
+        <li><a href="#commander">Commander</a></li>
+      </ul>
+      <a class="lb-nav__logo" href="#" aria-label="Les Bourguignols, accueil">
+        <img src="images/logo-noir.svg" alt="Les Bourguignols" width="150" height="86">
+      </a>
+      <ul class="lb-nav__links lb-nav__links--right">
+        <li><a href="#apropos">L'agence</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="lb-nav__burger" id="lb-burger" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Manchette -->
+    <section class="lb-mast" id="accueil">
+      <div class="wrap">
+        <div class="lb-mast__rule">
+          <p class="eyebrow">Bourgogne · Champagne · Rhône · Provence</p>
+          <h1 class="lb-mast__title">Les <em>Bourguignols</em></h1>
+          <p class="lb-mast__devise">Vingt-cinq domaines choisis un par un, du nord au sud.</p>
+          <div class="lb-mast__meta">
+            <span>Fondée en 2016</span><span>Montréal, Québec</span><span>Importation privée</span>
+          </div>
+        </div>
+
+        <div class="lb-une" id="une">
+          <div class="lb-une__col lb-une__article rev">
+            <h2>Une agence née d'un manque</h2>
+            <p>Nous avons fondé Les Bourguignols en 2016 pour une raison simple : les vins que nous aimions le plus n'arrivaient pas au Québec. Nous sommes allés les chercher, domaine par domaine, dans les villages où ils naissent.</p>
+            <p>Nous sommes nos propres premiers clients. Chaque cuvée de ce catalogue a été goûtée à la table du vigneron avant de traverser l'Atlantique.</p>
+            <a class="lb-btn lb-btn--vin" href="#domaines">Parcourir les domaines</a>
+          </div>
+          <div class="lb-une__col lb-une__photo rev">
+            <figure>
+              <img src="images/hero.jpg" alt="Vignes de la Côte de Nuits au petit matin" width="1920" height="1072">
+              <figcaption>Côte de Nuits, un matin d'automne. Les domaines représentés s'étirent de Bouzy, en Champagne, jusqu'à La Cadière-d'Azur, en Provence.</figcaption>
+            </figure>
+          </div>
+          <div class="lb-une__col rev">
+            <h2>L'itinéraire</h2>
+            <ul class="lb-itin" id="lb-itin"></ul>
+            <p class="lb-itin__foot">Cliquez une région pour n'afficher que ses domaines.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="filet">
+
+    <!-- Les domaines -->
+    <section class="lb-sec" id="domaines">
+      <div class="wrap">
+        <div class="lb-sec__head rev">
+          <h2>Les domaines</h2>
+          <div class="lb-sec__line"></div>
+          <div class="lb-sec__count" id="lb-count"></div>
+        </div>
+        <p class="lb-sec__intro rev">Chaque fiche présente le domaine, la personne qui le conduit et les cuvées que nous importons. Ouvrez-la pour voir les vins.</p>
+        <div class="lb-filters rev" id="lb-filters">
+          <div class="lb-search">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+            <input type="search" id="lb-search" placeholder="Un village, une appellation, un cépage" aria-label="Rechercher un domaine ou une cuvée">
+          </div>
+        </div>
+        <div class="lb-grid" id="lb-grid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- Bande photo -->
+    <div class="lb-band">
+      <img src="images/ambiance-degustation.jpg" alt="Verres de bourgogne rouge sur une table de dégustation" loading="lazy">
+      <div class="lb-band__q">
+        <p>« Nous sommes nos propres plus gros clients. »<small>Les fondateurs, 2016</small></p>
+      </div>
+    </div>
+
+    <!-- Commander -->
+    <section class="lb-sec" id="commander">
+      <div class="wrap">
+        <div class="lb-sec__head rev">
+          <h2>Commander en importation privée</h2>
+          <div class="lb-sec__line"></div>
+          <div class="lb-sec__count">Trois étapes</div>
+        </div>
+        <p class="lb-sec__intro rev">L'importation privée permet de recevoir des vins qui ne sont pas sur les tablettes de la SAQ. C'est simple et parfaitement encadré : la SAQ reste l'intermédiaire, nous faisons le reste.</p>
+        <div class="lb-steps rev">
+          <article class="lb-step">
+            <div class="lb-step__n">1</div>
+            <h3>Choisir</h3>
+            <p>Parcourez les domaines, ouvrez une fiche et notez les cuvées qui vous parlent. Sur demande, nous envoyons la liste des disponibilités et des prix du moment.</p>
+          </article>
+          <article class="lb-step">
+            <div class="lb-step__n">2</div>
+            <h3>Commander</h3>
+            <p>Écrivez-nous. La commande se fait à la caisse, et nous vous précisons les formats possibles pour chaque cuvée. Aucun engagement au-delà de votre commande.</p>
+          </article>
+          <article class="lb-step">
+            <div class="lb-step__n">3</div>
+            <h3>Recevoir</h3>
+            <p>Votre commande arrive dans la succursale SAQ de votre choix, où vous la réglez au moment de la cueillette. Quelques jours si le vin est déjà en entrepôt, quelques semaines s'il doit traverser l'Atlantique.</p>
+          </article>
+        </div>
+        <div class="lb-note rev">
+          <article>
+            <h4>Restaurateurs, cavistes et sommeliers</h4>
+            <p>Nous bâtissons des cartes avec plusieurs tables de Montréal et d'ailleurs au Québec. Demandez la liste professionnelle et les allocations à venir.</p>
+          </article>
+          <article>
+            <h4>Particuliers et clubs de dégustation</h4>
+            <p>Une caisse suffit. Nous vous prévenons des arrivages et des cuvées rares dont les quantités sont comptées.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- L'agence -->
+    <section class="lb-sec lb-about" id="apropos">
+      <div class="wrap lb-about__grid">
+        <div class="rev">
+          <p class="eyebrow">L'agence</p>
+          <h2>Trois amateurs devenus importateurs</h2>
+          <p>Vincent, Michel et Natacha ont fondé Les Bourguignols en juillet 2016, après quelques années à en rêver. L'idée : représenter des domaines dont ils buvaient déjà les vins, et qu'aucune agence ne faisait venir au Québec.</p>
+          <p>Dix ans plus tard, le catalogue compte vingt-cinq domaines, presque tous familiaux, presque tous en Bourgogne, avec quelques échappées en Champagne, dans le Rhône et en Provence. Chaque maison entre au catalogue pour une seule raison : nous voulions ses vins dans nos verres.</p>
+          <div class="lb-about__facts">
+            <div><b id="lb-fact-domaines">25</b><span>domaines</span></div>
+            <div><b id="lb-fact-cuvees">200</b><span>cuvées</span></div>
+            <div><b>8</b><span>régions</span></div>
+            <div><b>2016</b><span>fondation</span></div>
+          </div>
+        </div>
+        <blockquote class="rev">
+          Des vins de vignerons, choisis à la table du vigneron, pour des gens qui aiment le vin autant que nous.
+          <footer>Vincent, Michel et Natacha</footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="lb-sec lb-contact" id="contact">
+      <div class="wrap lb-contact__grid">
+        <div class="rev">
+          <p class="eyebrow">Contact</p>
+          <h2>Écrivez-nous</h2>
+          <p class="lb-contact__lead">Pour recevoir la liste des disponibilités, passer une commande ou simplement parler de Bourgogne.</p>
+          <ul class="lb-contact__list">
+            <li><span>Courriel</span><span><a href="mailto:contact@lesbourguignols.com">contact@lesbourguignols.com</a></span></li>
+            <li><span>Ville</span><span>Montréal, Québec</span></li>
+            <li><span>Commandes</span><span>Livraison dans la succursale SAQ de votre choix, partout au Québec</span></li>
+          </ul>
+        </div>
+        <form class="lb-form rev" id="lb-form" novalidate>
+          <div class="row">
+            <label>Nom <input type="text" name="nom" required autocomplete="name"></label>
+            <label>Courriel <input type="email" name="courriel" required autocomplete="email"></label>
+          </div>
+          <label>Je suis
+            <select name="profil">
+              <option>Un particulier</option>
+              <option>Un restaurateur ou une restauratrice</option>
+              <option>Un caviste ou sommelier</option>
+              <option>Un club de dégustation</option>
+            </select>
+          </label>
+          <label>Message <textarea name="message" placeholder="Les cuvées qui vous intéressent, le nombre de caisses, la succursale SAQ souhaitée…"></textarea></label>
+          <label class="check"><input type="checkbox" name="liste" checked> Je souhaite recevoir la liste des disponibilités</label>
+          <div class="lb-form__foot">
+            <button class="lb-btn lb-btn--vin" type="submit">Envoyer</button>
+            <small>Dans cette démonstration, le bouton ouvre votre logiciel de courriel.</small>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="lb-footer">
+    <div class="wrap">
+      <img class="lb-footer__logo" src="images/logo-noir.svg" alt="Les Bourguignols" width="120" height="69">
+      <div class="lb-footer__cols">
+        <a href="#domaines">Les domaines</a>
+        <a href="#commander">Commander</a>
+        <a href="#apropos">L'agence</a>
+        <a href="#contact">Contact</a>
+        <a href="gestion.html">Gestion des domaines</a>
+      </div>
+      <div class="lb-footer__legal">
+        © 2026 Les Bourguignols inc. · Montréal<br>
+        <span class="lb-footer__moderation">La modération a bien meilleur goût.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Fiche d'un domaine (modale) -->
+  <div class="lb-modal" id="lb-modal" role="dialog" aria-modal="true" aria-labelledby="lb-modal-title">
+    <div class="lb-modal__bg" data-close></div>
+    <div class="lb-modal__sheet">
+      <button class="lb-modal__close" data-close aria-label="Fermer la fiche">×</button>
+      <button class="lb-modal__nav lb-modal__nav--prev" id="lb-prev" aria-label="Domaine précédent"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button class="lb-modal__nav lb-modal__nav--next" id="lb-next" aria-label="Domaine suivant"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+      <div class="lb-modal__media">
+        <img id="lb-modal-img" src="" alt="">
+        <div class="lb-modal__num" id="lb-modal-num"></div>
+        <div class="lb-modal__caption" id="lb-modal-caption"></div>
+      </div>
+      <div class="lb-modal__content" id="lb-modal-content"></div>
+    </div>
+  </div>
+
+  <!-- Bandeau de démonstration (à retirer à la livraison) -->
+  <div class="lb-demo" id="lb-demo">
+    <span>Démonstration préparée par Vaelor Design pour Les Bourguignols · photos d'ambiance temporaires</span>
+    <a href="gestion.html">Voir le module de gestion</a>
+    <button aria-label="Fermer le bandeau" id="lb-demo-close">×</button>
+  </div>
+
+  <script src="js/domaines-data.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
