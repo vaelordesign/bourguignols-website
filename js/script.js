@@ -9,13 +9,6 @@
   'use strict';
 
   var STORAGE_KEY = 'lb_domaines_v1';
-  var COULEURS = [
-    ['effervescent', 'Effervescents'],
-    ['blanc', 'Blancs'],
-    ['rose', 'Rosés'],
-    ['rouge', 'Rouges']
-  ];
-
   /* ---------- Données ---------- */
   function chargerDonnees() {
     var base = window.LB_DATA || { regions: [], domaines: [] };
@@ -24,7 +17,7 @@
       if (brut) {
         var perso = JSON.parse(brut);
         if (perso && Array.isArray(perso.domaines)) {
-          return { regions: perso.regions || base.regions, domaines: perso.domaines };
+          return { regions: perso.regions || base.regions, domaines: perso.domaines, arrivages: perso.arrivages || [] };
         }
       }
     } catch (e) { /* stockage indisponible : on garde la version de base */ }
@@ -50,11 +43,7 @@
   var norm = function (s) {
     return String(s == null ? '' : s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   };
-  var PLACEHOLDER = 'data:image/svg+xml;utf8,' + encodeURIComponent(
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400"><rect width="600" height="400" fill="#e2d9c6"/>' +
-    '<text x="300" y="212" font-family="Georgia,serif" font-style="italic" font-size="26" fill="#7d736b" text-anchor="middle">Photo à venir</text></svg>');
-  var photoDe = function (d) { return d.photo || PLACEHOLDER; };
-  var couleurCle = function (c) { return norm(c).replace(/[^a-z]/g, ''); };
+  var photoDe = function (d) { return window.LB_FICHE.photoUrl(d, ''); };
   var pad = function (n) { return (n < 10 ? '0' : '') + n; };
 
   /* ---------- Itinéraire (hero) et filtres ---------- */
@@ -149,29 +138,21 @@
     $('lb-modal-num').textContent = pad(d.ordre);
     $('lb-modal-caption').textContent = d.village + (d.sousRegion ? ', ' + d.sousRegion : '') + ' · ' + d.region;
 
-    var meta = [];
-    if (d.vigneron) meta.push(['Vigneron', d.vigneron]);
-    if (d.fondation) meta.push(['Depuis', d.fondation]);
-    if (d.surface) meta.push(['Surface', d.surface]);
-    if (d.pratique) meta.push(['Culture', d.pratique]);
-
-    var groupes = COULEURS.map(function (c) {
-      var vins = (d.vins || []).filter(function (v) { return couleurCle(v.couleur) === c[0]; });
-      if (!vins.length) return '';
-      return '<h3>' + c[1] + '</h3><ul>' + vins.map(function (v) {
-        return '<li><div class="lb-wine__row"><span class="lb-wine__name">' + esc(v.nom) + '</span><span class="lb-wine__dots"></span><span class="lb-wine__app">' + esc(v.appellation) + '</span></div>' +
-          (v.cepage || v.note ? '<p class="lb-wine__note">' + (v.cepage ? '<span class="lb-wine__tag">' + esc(v.cepage) + '</span>' : '') + esc(v.note || '') + '</p>' : '') + '</li>';
-      }).join('') + '</ul>';
-    }).join('');
+    var F = window.LB_FICHE;
+    var page = F.pageUrl(d, '', window.LB_DATA);
 
     $('lb-modal-content').innerHTML =
       '<p class="eyebrow">' + esc(d.village) + ' · ' + esc(d.region) + '</p>' +
       '<h2 id="lb-modal-title">' + esc(d.nom) + '</h2>' +
       (d.signature ? '<p class="lb-modal__sig">' + esc(d.signature) + '</p>' : '') +
       (d.description ? '<p class="lb-modal__desc">' + esc(d.description) + '</p>' : '') +
-      (meta.length ? '<dl class="lb-meta">' + meta.map(function (m) { return '<div><dt>' + m[0] + '</dt><dd>' + esc(m[1]) + '</dd></div>'; }).join('') + '</dl>' : '') +
-      '<div class="lb-wines">' + (groupes || '<p class="lb-modal__desc">La liste des cuvées sera précisée sous peu.</p>') + '</div>' +
-      (d.site ? '<a class="lb-modal__site" href="' + esc(d.site) + '" target="_blank" rel="noopener">Site du domaine ↗</a>' : '') +
+      F.renderMeta(d) +
+      F.renderVins(d) +
+      '<div class="lb-modal__liens">' +
+        '<a class="lb-modal__site" href="' + esc(page) + '">Page du domaine →</a>' +
+        '<button type="button" data-copier="' + esc(page) + '">Copier le lien</button>' +
+        (d.site ? '<a class="lb-modal__site" href="' + esc(d.site) + '" target="_blank" rel="noopener">Site du domaine ↗</a>' : '') +
+      '</div>' +
       '<div class="lb-modal__order"><p>Ces cuvées vous parlent ?</p><a class="lb-btn lb-btn--vin" href="#contact" data-close>Demander les disponibilités</a></div>';
 
     var m = $('lb-modal');
@@ -198,6 +179,13 @@
     var m = $('lb-modal');
     m.addEventListener('click', function (e) {
       if (e.target.closest('[data-close]')) fermerFiche();
+      var c = e.target.closest('[data-copier]');
+      if (c) {
+        var url = new URL(c.getAttribute('data-copier'), location.href).href;
+        var fini = function () { c.textContent = 'Lien copié'; setTimeout(function () { c.textContent = 'Copier le lien'; }, 2000); };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(fini, function () { prompt('Copiez ce lien :', url); });
+        else prompt('Copiez ce lien :', url);
+      }
     });
     $('lb-prev').addEventListener('click', function () { if (indexCourant > 0) ouvrirFiche(indexCourant - 1); });
     $('lb-next').addEventListener('click', function () { if (indexCourant < listeCourante.length - 1) ouvrirFiche(indexCourant + 1); });
@@ -279,6 +267,51 @@
     x.addEventListener('click', function () { b.remove(); });
   }
 
+  /* ---------- Arrivages ---------- */
+  function rendreArrivages() {
+    var box = $('lb-arrivages'), meta = $('lb-arr-meta');
+    if (!box) return;
+    var F = window.LB_FICHE;
+    var tous = (DATA.arrivages || []).filter(function (a) { return a.visible !== false && a.statut !== 'brouillon'; })
+      .sort(function (a, b) { return String(b.date || '').localeCompare(String(a.date || '')); });
+    var aVenir = tous.filter(function (a) { return a.statut === 'a-venir'; }).reverse();
+    var passes = tous.filter(function (a) { return a.statut !== 'a-venir'; });
+    var domaine = function (id) { return DOMAINES.find(function (d) { return d.id === id; }); };
+
+    function bloc(a, passe) {
+      var lignes = (a.lignes || []).map(function (l) {
+        var d = l.domaineId ? domaine(l.domaineId) : null;
+        var nomDom = d ? '<a href="' + esc(F.pageUrl(d, '', window.LB_DATA)) + '">' + esc(d.nom) + '</a>' : esc(l.domaine || '');
+        var infos = [l.format, l.prix].filter(Boolean).map(esc);
+        if (l.quantite) infos.push('<span class="q">' + esc(l.quantite) + '</span>');
+        return '<li><span class="lb-arr__dom">' + nomDom + '</span><span class="lb-arr__cuvee">' + esc(l.cuvee) + (l.millesime ? ' ' + esc(l.millesime) : '') + '</span>' +
+          '<span class="lb-arr__dots"></span><span class="lb-arr__info">' + infos.join(' · ') + '</span>' +
+          (l.note ? '<p class="lb-arr__note">' + esc(l.note) + '</p>' : '') + '</li>';
+      }).join('');
+      var sujet = encodeURIComponent('Réservation : ' + a.titre);
+      return '<article class="lb-arr' + (passe ? ' lb-arr--passe' : '') + '">' +
+        '<div class="lb-arr__date"><p class="eyebrow">' + (passe ? 'Arrivage précédent' : 'Arrivée prévue') + '</p><b>' + esc(a.dateTexte || a.date || '') + '</b>' +
+          '<span class="statut' + (passe ? ' statut--arrive' : '') + '">' + (passe ? 'Arrivé' : 'Réservations ouvertes') + '</span></div>' +
+        '<div><h3>' + esc(a.titre) + '</h3>' + (a.texte ? '<p class="lb-arr__texte">' + esc(a.texte) + '</p>' : '') +
+          (lignes ? '<ul class="lb-arr__lignes">' + lignes + '</ul>' : '') +
+          (passe ? '' : '<div class="lb-arr__cta"><a class="lb-btn lb-btn--vin" href="mailto:contact@lesbourguignols.com?subject=' + sujet + '">Réserver des bouteilles</a><small>Réponse avec les quantités confirmées et le prix par caisse.</small></div>') +
+        '</div></article>';
+    }
+
+    var html = aVenir.map(function (a) { return bloc(a, false); }).join('');
+    if (!html) {
+      html = '<div class="lb-arr__vide">Aucun arrivage annoncé pour le moment. Écrivez-nous pour être prévenu du prochain.<br>' +
+        '<a class="lb-btn lb-btn--vin" href="mailto:contact@lesbourguignols.com?subject=' + encodeURIComponent('Prévenez-moi du prochain arrivage') + '">Être prévenu</a></div>';
+    }
+    if (passes.length) {
+      html += '<div class="lb-arr__passes"><h4>Arrivages précédents</h4><ul>' + passes.slice(0, 4).map(function (a) {
+        return '<li><span>' + esc(a.titre) + '</span><span>' + esc(a.dateTexte || a.date || '') + '</span></li>';
+      }).join('') + '</ul></div>';
+    }
+    box.innerHTML = html;
+    if (meta) meta.textContent = aVenir.length ? (aVenir.length > 1 ? aVenir.length + ' arrivages annoncés' : 'Réservations ouvertes') : 'À venir';
+  }
+
   function rendreFaits() {
     var a = $('lb-fact-domaines'), b = $('lb-fact-cuvees');
     if (a) a.textContent = DOMAINES.length;
@@ -289,6 +322,7 @@
   rendreItineraire();
   rendreFiltres();
   rendreGrille();
+  rendreArrivages();
   rendreFaits();
   lierModale();
   lierFiltres();

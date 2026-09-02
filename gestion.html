@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestion des domaines : Les Bourguignols</title>
+  <title>Gestion : Les Bourguignols</title>
   <meta name="robots" content="noindex">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%231e1a17'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' font-style='italic' fill='%23f4efe4' text-anchor='middle'%3EB%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,8 +17,8 @@
     <div class="lg-top__brand">
       <img src="images/logo-noir.svg" alt="Les Bourguignols" width="96" height="55">
       <div>
-        <strong>Gestion des domaines</strong>
-        <span>Module autogéré · ajouter, modifier, retirer</span>
+        <strong>Gestion du site</strong>
+        <span>Domaines, cuvées et arrivages</span>
       </div>
     </div>
     <div class="lg-top__actions">
@@ -29,18 +29,22 @@
   </header>
 
   <div class="lg-notice">
-    <b>Mode démonstration.</b> Ce que vous changez ici s'affiche tout de suite sur le site, dans ce navigateur. Dans la version finale sur WordPress, cet écran devient le tableau de bord de l'agence (menu « Domaines »), avec exactement les mêmes champs, et les changements sont visibles par tout le monde.
+    <b>Mode démonstration.</b> Ce que vous changez ici s'affiche tout de suite sur le site, dans ce navigateur. Dans la version finale sur WordPress, cet écran devient le tableau de bord de l'agence (menus « Domaines » et « Arrivages »), avec les mêmes champs, et les changements sont visibles par tout le monde.
   </div>
 
   <div class="lg-layout">
 
     <!-- Colonne de gauche : la liste -->
     <aside class="lg-list">
+      <div class="lg-mode" role="tablist">
+        <button type="button" class="is-active" data-mode="domaines" role="tab">Domaines</button>
+        <button type="button" data-mode="arrivages" role="tab">Arrivages</button>
+      </div>
       <div class="lg-list__head">
-        <input type="search" id="lg-filter" placeholder="Filtrer la liste" aria-label="Filtrer la liste des domaines">
+        <input type="search" id="lg-filter" placeholder="Filtrer la liste" aria-label="Filtrer la liste">
         <button class="lg-btn lg-btn--primary lg-btn--block" id="lg-add" type="button">+ Ajouter un domaine</button>
       </div>
-      <p class="lg-list__hint">Du nord au sud. Utilisez les flèches de la fiche pour changer l'ordre.</p>
+      <p class="lg-list__hint" id="lg-hint">Du nord au sud. Utilisez les flèches de la fiche pour changer l'ordre.</p>
       <ol class="lg-items" id="lg-items"></ol>
       <div class="lg-list__foot">
         <button class="lg-link" id="lg-export" type="button">Exporter le fichier de données</button>
@@ -51,15 +55,17 @@
     <!-- Colonne de droite : la fiche -->
     <main class="lg-editor" id="lg-editor">
       <div class="lg-empty" id="lg-empty">
-        <h2>Choisissez un domaine dans la liste</h2>
-        <p>ou ajoutez-en un nouveau. Chaque fiche contient les informations du domaine et la liste de ses cuvées.</p>
+        <h2>Choisissez un élément dans la liste</h2>
+        <p>ou ajoutez-en un nouveau. À gauche, l'onglet Domaines gère les fiches et leurs cuvées ; l'onglet Arrivages gère le bloc « Prochain arrivage » de la page d'accueil.</p>
       </div>
 
+      <!-- Fiche d'un domaine -->
       <form class="lg-form" id="lg-form" hidden autocomplete="off">
         <div class="lg-form__head">
           <div>
             <p class="lg-eyebrow" id="lg-form-eyebrow">Domaine</p>
             <h2 id="lg-form-title">Nouveau domaine</h2>
+            <p class="lg-url"><span>Adresse de la page :</span> <a id="lg-view" href="index.html" target="_blank" rel="noopener"></a> <button type="button" class="lg-link" id="lg-copy">Copier</button></p>
           </div>
           <div class="lg-order">
             <span>Position</span>
@@ -117,7 +123,53 @@
         <div class="lg-form__foot">
           <button type="button" class="lg-link lg-link--danger" id="lg-delete">Retirer ce domaine</button>
           <div>
-            <a class="lg-btn lg-btn--ghost" id="lg-view" href="index.html" target="_blank" rel="noopener">Voir la fiche sur le site ↗</a>
+            <a class="lg-btn lg-btn--ghost" id="lg-view-btn" href="index.html" target="_blank" rel="noopener">Voir la page ↗</a>
+            <button type="submit" class="lg-btn lg-btn--primary">Enregistrer</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Fiche d'un arrivage -->
+      <form class="lg-form" id="lg-form-arr" hidden autocomplete="off">
+        <div class="lg-form__head">
+          <div>
+            <p class="lg-eyebrow">Arrivage</p>
+            <h2 id="lg-arr-title">Nouvel arrivage</h2>
+            <p class="lg-help">Le bloc « Prochain arrivage » de l'accueil affiche les arrivages « À venir ». Passez-le à « Arrivé » une fois distribué : il descend dans la liste des arrivages précédents.</p>
+          </div>
+        </div>
+
+        <div class="lg-grid">
+          <label class="span2">Titre <input name="titre" required placeholder="Arrivage d'automne : Champagne et Côte de Nuits"></label>
+          <label>Date affichée <input name="dateTexte" placeholder="Semaine du 19 octobre 2026"></label>
+          <label>Date (pour le tri) <input name="date" type="date"></label>
+          <label>Statut
+            <select name="statut">
+              <option value="a-venir">À venir (réservations ouvertes)</option>
+              <option value="arrive">Arrivé</option>
+              <option value="brouillon">Brouillon (invisible)</option>
+            </select>
+          </label>
+          <label class="lg-check"><input type="checkbox" name="visible"> Afficher sur le site</label>
+          <label class="span2">Texte <textarea name="texte" rows="3" placeholder="Dates de réservation, conditions, livraison…"></textarea></label>
+        </div>
+
+        <section class="lg-wines">
+          <div class="lg-wines__head">
+            <div>
+              <p class="lg-eyebrow">Les vins de cet arrivage</p>
+              <h3 id="lg-lines-count">0 ligne</h3>
+            </div>
+            <button type="button" class="lg-btn lg-btn--ghost" id="lg-line-add">+ Ajouter un vin</button>
+          </div>
+          <div class="lg-lines__cols"><span>Domaine</span><span>Cuvée</span><span>Millésime</span><span>Format</span><span>Quantité</span><span>Prix</span><span>Note</span><span></span></div>
+          <div id="lg-lines"></div>
+        </section>
+
+        <div class="lg-form__foot">
+          <button type="button" class="lg-link lg-link--danger" id="lg-arr-delete">Retirer cet arrivage</button>
+          <div>
+            <a class="lg-btn lg-btn--ghost" href="index.html#arrivages" target="_blank" rel="noopener">Voir sur le site ↗</a>
             <button type="submit" class="lg-btn lg-btn--primary">Enregistrer</button>
           </div>
         </div>
@@ -128,6 +180,7 @@
   <div class="lg-toast" id="lg-toast" hidden></div>
 
   <script src="js/domaines-data.js"></script>
+  <script src="js/fiche.js"></script>
   <script src="js/gestion.js"></script>
 </body>
 </html>

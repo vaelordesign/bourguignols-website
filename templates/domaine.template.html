@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{TITLE}}</title>
+  <meta name="description" content="{{DESC}}">
+  <link rel="canonical" href="{{URL}}">
+  <meta property="og:title" content="{{TITLE}}">
+  <meta property="og:description" content="{{DESC}}">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="{{URL}}">
+  <meta property="og:image" content="{{IMAGE}}">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%235c1d2e'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' font-style='italic' fill='%23f4efe4' text-anchor='middle'%3EB%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{BASE}}css/styles.css">
+</head>
+<body class="lb" data-base="{{BASE}}" data-id="{{ID}}">
+
+  <div class="lb-topline">
+    <div class="wrap">
+      <span>Agence d'importation privée · Montréal</span>
+      <span>Vingt-cinq domaines, du nord au sud</span>
+      <a href="mailto:contact@lesbourguignols.com">contact@lesbourguignols.com</a>
+    </div>
+  </div>
+
+  <header class="lb-nav" id="lb-nav">
+    <div class="wrap">
+      <ul class="lb-nav__links lb-nav__links--left">
+        <li><a href="{{BASE}}index.html#domaines">Les domaines</a></li>
+        <li><a href="{{BASE}}index.html#une">L'itinéraire</a></li>
+        <li><a href="{{BASE}}index.html#commander">Commander</a></li>
+      </ul>
+      <a class="lb-nav__logo" href="{{BASE}}index.html" aria-label="Les Bourguignols, accueil">
+        <img src="{{BASE}}images/logo-noir.svg" alt="Les Bourguignols" width="150" height="86">
+      </a>
+      <ul class="lb-nav__links lb-nav__links--right">
+        <li><a href="{{BASE}}index.html#arrivages">Arrivages</a></li>
+        <li><a href="{{BASE}}index.html#apropos">L'agence</a></li>
+        <li><a href="{{BASE}}index.html#contact">Contact</a></li>
+      </ul>
+      <button class="lb-nav__burger" id="lb-burger" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <main id="lb-fiche">{{CONTENT}}</main>
+
+  <footer class="lb-footer">
+    <div class="wrap">
+      <img class="lb-footer__logo" src="{{BASE}}images/logo-noir.svg" alt="Les Bourguignols" width="120" height="69">
+      <div class="lb-footer__cols">
+        <a href="{{BASE}}index.html#domaines">Les domaines</a>
+        <a href="{{BASE}}index.html#arrivages">Arrivages</a>
+        <a href="{{BASE}}index.html#commander">Commander</a>
+        <a href="{{BASE}}index.html#contact">Contact</a>
+      </div>
+      <div class="lb-footer__legal">
+        © 2026 Les Bourguignols inc. · Montréal<br>
+        <span class="lb-footer__moderation">La modération a bien meilleur goût.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="{{BASE}}js/domaines-data.js"></script>
+  <script src="{{BASE}}js/fiche.js"></script>
+</body>
+</html>

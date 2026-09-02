@@ -343,3 +343,87 @@ body.lb-noscroll { overflow: hidden; }
   .lb-demo { font-size: 11px; padding-bottom: 12px; }
   .lb-band { height: 300px; }
 }
+
+/* ============================================================
+   AJOUTS DU 2 SEPTEMBRE (soir) : arrivages + pages de domaine
+   ============================================================ */
+
+/* ---------- Prochain arrivage ---------- */
+.lb-arrivages { background: var(--paper-2); border-top: 1px solid var(--filet); border-bottom: 1px solid var(--filet); }
+.lb-arr { display: grid; grid-template-columns: 220px 1fr; gap: clamp(22px, 4vw, 56px); background: var(--paper); border: 1px solid var(--filet); padding: clamp(22px, 3vw, 40px); }
+.lb-arr + .lb-arr { margin-top: 22px; }
+.lb-arr__date { border-right: 1px solid var(--filet-2); padding-right: 22px; }
+.lb-arr__date .eyebrow { margin: 0 0 8px; }
+.lb-arr__date b { display: block; font-family: var(--serif); font-size: 30px; font-weight: 500; line-height: 1.1; }
+.lb-arr__date .statut { display: inline-block; margin-top: 14px; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; font-weight: 700; padding: 5px 10px; border: 1px solid var(--vin); color: var(--vin); }
+.lb-arr__date .statut--arrive { border-color: var(--ink-3); color: var(--ink-3); }
+.lb-arr h3 { font-size: clamp(26px, 3vw, 36px); margin-bottom: 10px; }
+.lb-arr__texte { font-family: var(--serif); font-size: 18.5px; color: var(--ink-2); line-height: 1.5; max-width: 62ch; }
+.lb-arr__lignes { list-style: none; margin: 18px 0 0; padding: 0; }
+.lb-arr__lignes li { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; padding: 10px 0; border-bottom: 1px dotted var(--filet); }
+.lb-arr__lignes li:last-child { border-bottom: 0; }
+.lb-arr__dom { font-family: var(--serif); font-size: 20px; font-weight: 500; }
+.lb-arr__dom a { text-decoration: none; border-bottom: 1px solid var(--filet); }
+.lb-arr__dom a:hover { color: var(--vin); border-color: var(--vin); }
+.lb-arr__cuvee { font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--ink-2); }
+.lb-arr__dots { flex: 1; min-width: 24px; border-bottom: 1px dotted var(--filet); transform: translateY(-6px); }
+.lb-arr__info { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+.lb-arr__info .q { color: var(--vin); font-weight: 700; }
+.lb-arr__note { width: 100%; font-size: 13px; color: var(--ink-3); font-style: italic; margin: -4px 0 0; }
+.lb-arr__cta { margin-top: 24px; display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+.lb-arr__cta small { font-size: 12.5px; color: var(--ink-3); font-style: italic; }
+.lb-arr--passe { background: transparent; border-style: dashed; }
+.lb-arr--passe h3 { font-size: 24px; }
+.lb-arr__vide { font-family: var(--serif); font-size: 22px; color: var(--ink-2); font-style: italic; padding: 10px 0 0; }
+.lb-arr__vide .lb-btn { font-style: normal; margin-top: 18px; }
+.lb-arr__passes { margin-top: 26px; }
+.lb-arr__passes h4 { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-3); font-weight: 700; margin: 0 0 8px; font-family: var(--sans); }
+.lb-arr__passes ul { list-style: none; margin: 0; padding: 0; }
+.lb-arr__passes li { display: flex; gap: 10px; align-items: baseline; padding: 6px 0; border-bottom: 1px dotted var(--filet-2); font-family: var(--serif); font-size: 17px; }
+.lb-arr__passes li span:last-child { margin-left: auto; font-family: var(--sans); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+
+/* ---------- Page d'un domaine ---------- */
+.lb-fiche { padding: clamp(26px, 4vw, 48px) 0 clamp(50px, 7vw, 90px); }
+.lb-fiche__fil { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 20px; }
+.lb-fiche__fil a { text-decoration: none; border-bottom: 1px solid var(--filet); }
+.lb-fiche__fil a:hover { color: var(--vin); }
+.lb-fiche__head { display: flex; gap: 22px; align-items: flex-start; border-top: 3px double var(--filet); border-bottom: 1px solid var(--filet); padding: 26px 0; margin-bottom: clamp(26px, 4vw, 44px); }
+.lb-fiche__num { flex: 0 0 auto; width: 64px; height: 64px; border-radius: 50%; border: 1px solid var(--vin); color: var(--vin); font-family: var(--serif); font-size: 26px; font-weight: 600; display: grid; place-items: center; }
+.lb-fiche__head h1 { font-size: clamp(38px, 5.4vw, 72px); margin: 6px 0 8px; }
+.lb-fiche__sig { font-family: var(--serif); font-style: italic; font-size: clamp(19px, 2.2vw, 24px); color: var(--vin); margin: 0; }
+.lb-fiche__grid { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(26px, 4vw, 60px); align-items: start; }
+.lb-fiche__media { position: sticky; top: 96px; }
+.lb-fiche__media img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+.lb-fiche__legende { font-size: 12px; color: var(--ink-3); font-style: italic; padding-top: 8px; border-top: 1px solid var(--filet-2); margin-top: 8px; }
+.lb-fiche__body .lb-modal__desc { font-size: 20px; }
+.lb-fiche__body .lb-wines h3 { margin-top: 26px; }
+.lb-wine__link { font-family: var(--sans); font-size: 12px; color: var(--ink-3); text-decoration: none; padding: 0 4px; opacity: 0; transition: opacity .2s; }
+.lb-wines li:hover .lb-wine__link, .lb-wines li:target .lb-wine__link { opacity: 1; }
+.lb-wines li:target, .lb-wines li.is-cible { background: var(--paper-2); box-shadow: -10px 0 0 var(--paper-2), 10px 0 0 var(--paper-2); scroll-margin-top: 110px; }
+.lb-fiche__nav { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: clamp(36px, 5vw, 60px); border-top: 1px solid var(--filet); padding-top: 22px; }
+.lb-fiche__nav a { text-decoration: none; display: grid; gap: 4px; }
+.lb-fiche__nav a.next { text-align: right; }
+.lb-fiche__nav small { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-3); font-weight: 700; }
+.lb-fiche__nav span { font-family: var(--serif); font-size: 24px; transition: color .2s; }
+.lb-fiche__nav a:hover span { color: var(--vin); }
+.lb-fiche__absent { padding: 80px 0; text-align: center; }
+.lb-fiche__absent h1 { font-size: 34px; margin: 10px 0 24px; }
+.lb-modal__liens { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; margin-top: 22px; }
+.lb-modal__liens .lb-modal__site { margin-top: 0; }
+.lb-modal__liens button { background: none; border: 0; padding: 0; font: inherit; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; font-weight: 600; color: var(--ink-2); cursor: pointer; border-bottom: 1px solid var(--filet); }
+.lb-modal__liens button:hover { color: var(--vin); border-color: var(--vin); }
+
+@media (max-width: 1024px) {
+  .lb-fiche__grid { grid-template-columns: 1fr; }
+  .lb-fiche__media { position: static; }
+}
+@media (max-width: 767px) {
+  .lb-arr { grid-template-columns: 1fr; gap: 16px; }
+  .lb-arr__date { border-right: 0; border-bottom: 1px solid var(--filet-2); padding: 0 0 14px; }
+  .lb-arr__lignes li { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .lb-arr__dots { display: none; }
+  .lb-fiche__head { flex-direction: column; gap: 12px; }
+  .lb-fiche__nav { grid-template-columns: 1fr; }
+  .lb-fiche__nav a.next { text-align: left; }
+  .lb-wine__link { opacity: 1; }
+}

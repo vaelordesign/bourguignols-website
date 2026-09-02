@@ -1921,5 +1921,110 @@ window.LB_DATA = {
         }
       ]
     }
+  ],
+  "arrivages": [
+    {
+      "id": "automne-2026",
+      "titre": "Arrivage d’automne : Champagne et Côte de Nuits",
+      "date": "2026-10-19",
+      "dateTexte": "Semaine du 19 octobre 2026",
+      "statut": "a-venir",
+      "visible": true,
+      "texte": "Le conteneur quitte Beaune à la mi-septembre. Les réservations sont ouvertes jusqu’au 5 octobre ; les quantités indiquées sont celles qu’il reste à réserver. Livraison dans la succursale SAQ de votre choix.",
+      "lignes": [
+        {
+          "domaineId": "georges-remy",
+          "cuvee": "Les Hauts Clos",
+          "millesime": "",
+          "format": "Caisse de 6",
+          "quantite": "14 caisses",
+          "prix": "",
+          "note": ""
+        },
+        {
+          "domaineId": "lilbert-fils",
+          "cuvee": "Grand Cru Blanc de Blancs Brut",
+          "millesime": "",
+          "format": "Caisse de 6",
+          "quantite": "6 caisses",
+          "prix": "",
+          "note": "Quantités très limitées"
+        },
+        {
+          "domaineId": "jean-collet",
+          "cuvee": "Chablis 1er Cru Montée de Tonnerre",
+          "millesime": "2023",
+          "format": "Caisse de 12",
+          "quantite": "20 caisses",
+          "prix": "",
+          "note": ""
+        },
+        {
+          "domaineId": "robert-groffier",
+          "cuvee": "Chambertin Grand Cru",
+          "millesime": "2022",
+          "format": "Caisse de 6",
+          "quantite": "4 caisses",
+          "prix": "",
+          "note": "Allocation"
+        },
+        {
+          "domaineId": "felettig",
+          "cuvee": "Echezeaux Grand Cru",
+          "millesime": "2022",
+          "format": "Caisse de 6",
+          "quantite": "10 caisses",
+          "prix": "",
+          "note": ""
+        },
+        {
+          "domaineId": "jean-marc-millot",
+          "cuvee": "Grands Échézeaux Grand Cru",
+          "millesime": "2022",
+          "format": "Caisse de 6",
+          "quantite": "8 caisses",
+          "prix": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "printemps-2026",
+      "titre": "Arrivage de printemps : Côte de Beaune en blanc",
+      "date": "2026-04-14",
+      "dateTexte": "Avril 2026",
+      "statut": "arrive",
+      "visible": true,
+      "texte": "Arrivé et distribué. Quelques bouteilles restent en entrepôt : écrivez-nous.",
+      "lignes": [
+        {
+          "domaineId": "jobard-morey",
+          "cuvee": "Meursault 1er Cru Charmes",
+          "millesime": "2022",
+          "format": "Caisse de 6",
+          "quantite": "",
+          "prix": "",
+          "note": ""
+        },
+        {
+          "domaineId": "tessier",
+          "cuvee": "Meursault 1er Cru Les Charmes Dessus",
+          "millesime": "2022",
+          "format": "Caisse de 6",
+          "quantite": "",
+          "prix": "",
+          "note": ""
+        },
+        {
+          "domaineId": "coffinet-duvernay",
+          "cuvee": "Bâtard-Montrachet Grand Cru",
+          "millesime": "2022",
+          "format": "Caisse de 6",
+          "quantite": "",
+          "prix": "",
+          "note": ""
+        }
+      ]
+    }
   ]
 };
