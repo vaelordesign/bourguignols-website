@@ -166,6 +166,19 @@
           <div id="lg-lines"></div>
         </section>
 
+        <div class="lg-photo lg-fichier">
+          <div>
+            <p class="lg-eyebrow">Liste téléchargeable (PDF)</p>
+            <p class="lg-help">Par défaut, le site fabrique lui-même le PDF à partir des vins saisis ci-dessus : rien à faire. Si vous préférez votre propre document (liste de prix, fiche maison), téléversez-le ici et il remplacera le PDF automatique pour cet arrivage.</p>
+            <p class="lg-help" id="lg-fichier-nom">Aucun fichier : le PDF automatique est utilisé.</p>
+          </div>
+          <div class="lg-photo__actions">
+            <button type="button" class="lg-btn lg-btn--ghost" id="lg-arr-apercu">Aperçu du PDF automatique</button>
+            <label class="lg-btn lg-btn--ghost">Téléverser un PDF <input type="file" id="lg-fichier" accept="application/pdf" hidden></label>
+            <button type="button" class="lg-link" id="lg-fichier-remove">Retirer le fichier</button>
+          </div>
+        </div>
+
         <div class="lg-form__foot">
           <button type="button" class="lg-link lg-link--danger" id="lg-arr-delete">Retirer cet arrivage</button>
           <div>
@@ -181,6 +194,7 @@
 
   <script src="js/domaines-data.js"></script>
   <script src="js/fiche.js"></script>
+  <script src="js/pdf-liste.js"></script>
   <script src="js/gestion.js"></script>
 </body>
 </html>

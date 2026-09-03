@@ -294,8 +294,27 @@
           '<span class="statut' + (passe ? ' statut--arrive' : '') + '">' + (passe ? 'Arrivé' : 'Réservations ouvertes') + '</span></div>' +
         '<div><h3>' + esc(a.titre) + '</h3>' + (a.texte ? '<p class="lb-arr__texte">' + esc(a.texte) + '</p>' : '') +
           (lignes ? '<ul class="lb-arr__lignes">' + lignes + '</ul>' : '') +
-          (passe ? '' : '<div class="lb-arr__cta"><a class="lb-btn lb-btn--vin" href="mailto:contact@lesbourguignols.com?subject=' + sujet + '">Réserver des bouteilles</a><small>Réponse avec les quantités confirmées et le prix par caisse.</small></div>') +
+          (passe ? '' : '<div class="lb-arr__cta"><a class="lb-btn lb-btn--vin" href="mailto:contact@lesbourguignols.com?subject=' + sujet + '">Réserver des bouteilles</a>' +
+            (a.fichier ? '<a class="lb-btn" href="' + esc(a.fichier) + '" download="' + esc(a.fichierNom || 'liste.pdf') + '">Télécharger la liste (PDF)</a>' : '<a class="lb-btn" href="arrivages/' + esc(a.id) + '.pdf" data-pdf="' + esc(a.id) + '">Télécharger la liste (PDF)</a>') +
+            '<small>Réponse avec les quantités confirmées et le prix par caisse.</small></div>') +
         '</div></article>';
+    }
+
+    /* Calendrier + liste téléchargeable */
+    var cal = $('lb-calendrier');
+    if (cal) {
+      var lignesCal = aVenir.concat(passes.slice(0, 3)).map(function (a) {
+        var passe = a.statut !== 'a-venir';
+        return '<li' + (passe ? ' class="passe"' : '') + '><span class="d">' + esc(a.dateTexte || window.LB_PDF.dateFr(a.date)) + '</span>' +
+          '<span class="t">' + esc(a.titre) + '</span><span class="s">' + (passe ? 'Arrivé' : 'Réservations ouvertes') + '</span>' +
+          '<a class="p" href="arrivages/' + esc(a.id) + '.pdf" data-pdf="' + esc(a.id) + '">PDF</a></li>';
+      }).join('');
+      cal.innerHTML =
+        '<div class="lb-cal__txt"><p class="eyebrow">Calendrier</p><h3>Quand arrivent les vins</h3>' +
+          '<p>Les dates des prochains conteneurs et la liste des cuvées annoncées, à télécharger et à garder. Mise à jour à chaque arrivage.</p>' +
+          '<div class="lb-cal__btns"><a class="lb-btn lb-btn--vin" href="arrivages/liste-arrivages.pdf" data-pdf="all">Télécharger la liste des arrivages (PDF)</a>' +
+          '<a class="lb-btn" href="mailto:contact@lesbourguignols.com?subject=' + encodeURIComponent('Prévenez-moi des prochains arrivages') + '">Être prévenu par courriel</a></div></div>' +
+        '<ul class="lb-cal__list">' + (lignesCal || '<li><span class="t">Aucun arrivage annoncé pour le moment.</span></li>') + '</ul>';
     }
 
     var html = aVenir.map(function (a) { return bloc(a, false); }).join('');
@@ -310,6 +329,23 @@
     }
     box.innerHTML = html;
     if (meta) meta.textContent = aVenir.length ? (aVenir.length > 1 ? aVenir.length + ' arrivages annoncés' : 'Réservations ouvertes') : 'À venir';
+
+    /* Téléchargement : le PDF est fabriqué à la volée à partir des données affichées
+       (donc à jour même après une modification dans le module de gestion) */
+    var sec = $('arrivages');
+    if (sec && !sec.hasAttribute('data-pdf-lie')) {
+      sec.setAttribute('data-pdf-lie', '1');
+      sec.addEventListener('click', function (e) {
+        var a = e.target.closest('[data-pdf]');
+        if (!a || !window.LB_PDF) return;
+        e.preventDefault();
+        var id = a.getAttribute('data-pdf');
+        var arr = id === 'all' ? null : (DATA.arrivages || []).find(function (x) { return x.id === id; });
+        if (arr && arr.fichier) { location.href = arr.fichier; return; }
+        var bin = window.LB_PDF.listeArrivages({ domaines: DOMAINES, arrivages: DATA.arrivages || [] }, id === 'all' ? {} : { ids: [id], titre: arr ? arr.titre : '' });
+        window.LB_PDF.telecharger(id === 'all' ? 'bourguignols-liste-arrivages.pdf' : window.LB_PDF.nomFichier(arr), bin);
+      });
+    }
   }
 
   function rendreFaits() {

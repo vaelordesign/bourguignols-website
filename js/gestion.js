@@ -180,8 +180,25 @@
     f.elements.statut.value = arrCourant.statut || 'a-venir';
     f.elements.visible.checked = arrCourant.visible !== false;
     $('lg-arr-title').textContent = arrCourant.titre || 'Nouvel arrivage';
-    rendreLignes(); rendreListe();
+    rendreFichier(); rendreLignes(); rendreListe();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function rendreFichier() {
+    $('lg-fichier-nom').textContent = arrCourant.fichier
+      ? 'Fichier téléversé : ' + (arrCourant.fichierNom || 'liste.pdf') + ' (remplace le PDF automatique).'
+      : 'Aucun fichier : le PDF automatique est utilisé.';
+    $('lg-fichier-remove').hidden = !arrCourant.fichier;
+  }
+  function lireFichier(file) {
+    if (file.type !== 'application/pdf') { toast('Seul un fichier PDF est accepté.'); return; }
+    if (file.size > 2 * 1024 * 1024) { toast('Fichier trop lourd pour la démonstration (2 Mo maximum).'); return; }
+    var reader = new FileReader();
+    reader.onload = function () { arrCourant.fichier = reader.result; arrCourant.fichierNom = file.name; rendreFichier(); marquer(true); };
+    reader.readAsDataURL(file);
+  }
+  function apercuPdf() {
+    var bin = window.LB_PDF.listeArrivages({ domaines: DATA.domaines, arrivages: DATA.arrivages }, { ids: [arrCourant.id], titre: arrCourant.titre });
+    window.LB_PDF.telecharger(window.LB_PDF.nomFichier(arrCourant), bin);
   }
   function rendreLignes() {
     var lignes = arrCourant.lignes || (arrCourant.lignes = []);
@@ -348,6 +365,9 @@
       marquer(true); rendreLignes();
       var inp = $('lg-lines').querySelector('.lg-line:last-child input'); if (inp) inp.focus();
     });
+    $('lg-fichier').addEventListener('change', function (e) { if (e.target.files[0]) lireFichier(e.target.files[0]); e.target.value = ''; });
+    $('lg-fichier-remove').addEventListener('click', function () { arrCourant.fichier = ''; arrCourant.fichierNom = ''; rendreFichier(); marquer(true); });
+    $('lg-arr-apercu').addEventListener('click', apercuPdf);
     $('lg-arr-delete').addEventListener('click', function () {
       if (!confirm('Retirer l’arrivage « ' + (arrCourant.titre || 'sans titre') + ' » ?')) return;
       DATA.arrivages = DATA.arrivages.filter(function (a) { return a !== arrCourant; });

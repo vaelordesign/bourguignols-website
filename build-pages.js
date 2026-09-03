@@ -52,6 +52,24 @@ liste.forEach((d, i) => {
   fs.writeFileSync(path.join(dossier, d.id, 'index.html'), html, 'utf8');
 });
 
+// Listes d'arrivages en PDF (la liste complète + une par arrivage) et fichiers téléversés
+const { LB_PDF } = require('./js/pdf-liste.js');
+const dossierArr = path.join(RACINE, 'arrivages');
+fs.mkdirSync(dossierArr, { recursive: true });
+for (const f of fs.readdirSync(dossierArr)) fs.rmSync(path.join(dossierArr, f), { force: true });
+const dateMaj = LB_PDF.dateFr(process.env.LB_DATE || new Date().toISOString().slice(0, 10));
+fs.writeFileSync(path.join(dossierArr, 'liste-arrivages.pdf'), Buffer.from(LB_PDF.listeArrivages(DATA, { dateMaj }), 'latin1'));
+let nbArr = 0;
+for (const a of (DATA.arrivages || []).filter(a => a.visible !== false && a.statut !== 'brouillon')) {
+  if (a.fichier && /^data:application\/pdf;base64,/.test(a.fichier)) {
+    fs.writeFileSync(path.join(dossierArr, a.id + '.pdf'), Buffer.from(a.fichier.split(',')[1], 'base64'));
+  } else {
+    fs.writeFileSync(path.join(dossierArr, a.id + '.pdf'), Buffer.from(LB_PDF.listeArrivages(DATA, { ids: [a.id], titre: a.titre, dateMaj }), 'latin1'));
+  }
+  nbArr++;
+}
+console.log('PDF : liste-arrivages.pdf + ' + nbArr + ' arrivage(s)');
+
 // Page générique (rendue par le navigateur à partir de ?id=)
 fs.writeFileSync(path.join(RACINE, 'domaine.html'), remplir({
   TITLE: 'Fiche de domaine : Les Bourguignols', DESC: 'Fiche d’un domaine représenté par Les Bourguignols, agence d’importation privée à Montréal.',

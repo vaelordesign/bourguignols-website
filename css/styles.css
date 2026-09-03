@@ -427,3 +427,24 @@ body.lb-noscroll { overflow: hidden; }
   .lb-fiche__nav a.next { text-align: left; }
   .lb-wine__link { opacity: 1; }
 }
+
+/* ---------- Calendrier des arrivages + liste téléchargeable ---------- */
+.lb-cal { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(24px, 4vw, 56px); padding-bottom: 30px; margin-bottom: 30px; border-bottom: 1px solid var(--filet); }
+.lb-cal h3 { font-size: clamp(26px, 3vw, 36px); margin: 4px 0 10px; }
+.lb-cal__txt > p:not(.eyebrow) { font-family: var(--serif); font-size: 18.5px; color: var(--ink-2); line-height: 1.5; max-width: 48ch; }
+.lb-cal__btns { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+.lb-cal__list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
+.lb-cal__list li { display: grid; grid-template-columns: 150px 1fr auto auto; gap: 14px; align-items: baseline; padding: 12px 0; border-bottom: 1px dotted var(--filet); }
+.lb-cal__list .d { font-family: var(--serif); font-size: 19px; font-weight: 600; color: var(--vin); }
+.lb-cal__list .t { font-family: var(--serif); font-size: 19px; }
+.lb-cal__list .s { font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--vin); font-weight: 700; }
+.lb-cal__list .p { font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; text-decoration: none; border: 1px solid var(--filet); padding: 4px 8px; transition: all .2s; }
+.lb-cal__list .p:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.lb-cal__list li.passe .d, .lb-cal__list li.passe .s { color: var(--ink-3); }
+.lb-cal__list li.passe .t { color: var(--ink-2); }
+@media (max-width: 1024px) { .lb-cal { grid-template-columns: 1fr; } }
+@media (max-width: 767px) {
+  .lb-cal__list li { grid-template-columns: 1fr auto; gap: 4px 12px; }
+  .lb-cal__list .t { grid-column: 1 / -1; }
+  .lb-cal__btns .lb-btn { width: 100%; }
+}

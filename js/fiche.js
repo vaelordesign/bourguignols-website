@@ -131,4 +131,4 @@
   if (nav && burger) {
     burger.addEventListener('click', function () { var o = nav.classList.toggle('is-open'); burger.setAttribute('aria-expanded', o ? 'true' : 'false'); });
   }
-})(typeof window !== 'undefined' ? window : module.exports);
+})(typeof module !== 'undefined' && module.exports ? module.exports : window);
