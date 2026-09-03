@@ -86,7 +86,7 @@
   font-size: clamp(56px, 11vw, 150px); font-weight: 500; letter-spacing: -.01em; line-height: .95; margin: 8px 0 6px;
 }
 .lb-mast__title em { font-style: italic; font-weight: 400; color: var(--vin); }
-.lb .lb-mast__logo { display: block; width: min(820px, 92%); margin: 26px auto 8px; }
+.lb .lb-mast__logo { display: block; width: min(680px, 88%); margin: 22px auto 6px; }
 .lb .lb-mast__logo img { display: block; width: 100%; height: auto; margin: 0 auto; }
 .lb-mast__devise { font-family: var(--serif); font-style: italic; font-size: clamp(20px, 2.6vw, 30px); color: var(--ink-2); margin: 10px 0 0; }
 .lb-mast__meta { display: flex; justify-content: center; gap: 26px; flex-wrap: wrap; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-2); margin-top: 22px; }
