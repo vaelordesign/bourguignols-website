@@ -111,14 +111,14 @@
     } else {
       grid.innerHTML = listeCourante.map(function (d, i) {
         var nb = (d.vins || []).length;
-        return '<button type="button" class="lb-card rev is-in" data-i="' + i + '">' +
+        return '<article class="lb-card rev is-in" role="button" tabindex="0" data-i="' + i + '" aria-label="' + esc(d.nom) + ', voir les vins">' +
           '<div class="lb-card__img"><img src="' + esc(photoDe(d)) + '" alt="' + esc(d.nom) + '" loading="lazy"><div class="lb-card__num">' + pad(d.ordre) + '</div></div>' +
           '<div class="lb-card__body">' +
             '<div class="lb-card__where"><span>' + esc(d.village) + '</span><span class="reg">' + esc(d.region) + '</span></div>' +
             '<h3>' + esc(d.nom) + '</h3>' +
             (d.signature ? '<p class="lb-card__sig">' + esc(d.signature) + '</p>' : '') +
             '<div class="lb-card__foot"><span>' + nb + (nb > 1 ? ' cuvées' : ' cuvée') + '</span><span class="cta">Voir les vins →</span></div>' +
-          '</div></button>';
+          '</div></article>';
       }).join('');
     }
     var count = $('lb-count');
@@ -136,17 +136,17 @@
     $('lb-modal-img').src = photoDe(d);
     $('lb-modal-img').alt = d.nom;
     $('lb-modal-num').textContent = pad(d.ordre);
-    $('lb-modal-caption').textContent = d.village + (d.sousRegion ? ', ' + d.sousRegion : '') + ' · ' + d.region;
+    $('lb-modal-caption').textContent = 'Ambiance de ' + d.village + (d.sousRegion ? ', ' + d.sousRegion : '') + ' · ' + d.region;
 
     var F = window.LB_FICHE;
     var page = F.pageUrl(d, '', window.LB_DATA);
+    $('lb-modal-meta').innerHTML = F.renderMeta(d);
 
     $('lb-modal-content').innerHTML =
       '<p class="eyebrow">' + esc(d.village) + ' · ' + esc(d.region) + '</p>' +
       '<h2 id="lb-modal-title">' + esc(d.nom) + '</h2>' +
       (d.signature ? '<p class="lb-modal__sig">' + esc(d.signature) + '</p>' : '') +
       (d.description ? '<p class="lb-modal__desc">' + esc(d.description) + '</p>' : '') +
-      F.renderMeta(d) +
       F.renderVins(d) +
       '<div class="lb-modal__liens">' +
         '<a class="lb-modal__site" href="' + esc(page) + '">Page du domaine →</a>' +
@@ -198,6 +198,10 @@
     $('lb-grid').addEventListener('click', function (e) {
       var card = e.target.closest('.lb-card');
       if (card) ouvrirFiche(parseInt(card.getAttribute('data-i'), 10));
+    });
+    $('lb-grid').addEventListener('keydown', function (e) {
+      var card = e.target.closest('.lb-card');
+      if (card && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); ouvrirFiche(parseInt(card.getAttribute('data-i'), 10)); }
     });
   }
 

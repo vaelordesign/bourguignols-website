@@ -51,7 +51,8 @@
         var id = 'cuvee-' + slug(v.nom);
         return '<li id="' + id + '"><div class="lb-wine__row"><span class="lb-wine__name">' + esc(v.nom) + '</span><span class="lb-wine__dots"></span><span class="lb-wine__app">' + esc(v.appellation) + '</span>' +
           (opts.liens ? '<a class="lb-wine__link" href="#' + id + '" title="Lien direct vers cette cuvée">#</a>' : '') + '</div>' +
-          (v.cepage || v.note ? '<p class="lb-wine__note">' + (v.cepage ? '<span class="lb-wine__tag">' + esc(v.cepage) + '</span>' : '') + esc(v.note || '') + '</p>' : '') + '</li>';
+          (v.cepage ? '<span class="lb-wine__cepage"><b>Cépage</b> · ' + esc(v.cepage) + '</span>' : '') +
+          (v.note ? '<span class="lb-wine__note">' + esc(v.note) + '</span>' : '') + '</li>';
       }).join('') + '</ul>';
     }).join('');
     return '<div class="lb-wines">' + (groupes || '<p class="lb-modal__desc">La liste des cuvées sera précisée sous peu.</p>') + '</div>';
@@ -79,10 +80,9 @@
           (d.signature ? '<p class="lb-fiche__sig">' + esc(d.signature) + '</p>' : '') + '</div>' +
         '</header>' +
         '<div class="lb-fiche__grid">' +
-          '<div class="lb-fiche__media"><img src="' + esc(photoUrl(d, base)) + '" alt="' + esc(d.nom) + '"><p class="lb-fiche__legende">Ambiance de ' + esc(d.village) + '</p></div>' +
+          '<div class="lb-fiche__media"><img src="' + esc(photoUrl(d, base)) + '" alt="' + esc(d.nom) + '"><p class="lb-fiche__legende">Ambiance de ' + esc(d.village) + '</p>' + renderMeta(d) + '</div>' +
           '<div class="lb-fiche__body">' +
             (d.description ? '<p class="lb-modal__desc">' + esc(d.description) + '</p>' : '') +
-            renderMeta(d) +
             renderVins(d, { liens: true }) +
             (d.site ? '<a class="lb-modal__site" href="' + esc(d.site) + '" target="_blank" rel="noopener">Site du domaine ↗</a>' : '') +
             '<div class="lb-modal__order"><p>Ces cuvées vous parlent ?</p><a class="lb-btn lb-btn--vin" href="mailto:contact@lesbourguignols.com?subject=' + sujet + '">Demander les disponibilités</a></div>' +

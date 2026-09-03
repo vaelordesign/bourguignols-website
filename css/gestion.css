@@ -68,7 +68,7 @@
 .lg-check input { width: 18px; height: 18px; }
 
 .lg-photo { display: grid; grid-template-columns: 300px 1fr; gap: 20px; align-items: center; margin: 24px 0; padding: 18px; border: 1px solid var(--filet-2); background: var(--paper-2); }
-.lg-photo__preview { aspect-ratio: 3 / 2; background: #e2d9c6; overflow: hidden; }
+.lg-photo__preview { aspect-ratio: 3 / 2; background: #e2d9c6; overflow: hidden; border-radius: 12px; }
 .lg-photo__preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .lg-photo__actions { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
 
