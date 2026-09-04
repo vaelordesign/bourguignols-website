@@ -525,7 +525,16 @@
       var bouton = form.querySelector('button[type="submit"]');
       bouton.disabled = true; bouton.textContent = 'Connexion…';
       N.connexion(form.elements.courriel.value, form.elements.motdepasse.value).then(function () {
-        location.reload();
+        return N.lire();
+      }).then(function (d) {
+        /* On ne recharge PAS la page : si le navigateur refuse le stockage, un
+           rechargement perdrait la session et ramènerait ici sans rien dire. */
+        voile.hidden = true;
+        document.body.classList.remove('is-locked');
+        demarrer(d, true);
+        if (N.stockage() !== 'durable') {
+          toast('Vous êtes entré. Attention : votre navigateur refuse de retenir la connexion (navigation privée ou protection anti-pistage). Il faudra vous reconnecter à chaque page.', 9000);
+        }
       }).catch(function (ex) {
         essais++;
         var msg = ex.message;

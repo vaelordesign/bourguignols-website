@@ -27,22 +27,53 @@
     return h;
   }
 
-  /* ---------- La session (qui est connecté) ---------- */
+  /* ---------- La session (qui est connecté) ----------
+     Certains navigateurs refusent le stockage : navigation privée, protection
+     anti-pistage, cookies bloqués pour le site. Sans filet, la connexion
+     réussissait côté serveur mais la session disparaissait aussitôt : la page
+     revenait à l'écran de connexion sans rien expliquer, et on croyait que le
+     mot de passe était faux. On descend donc les marches une à une :
+     localStorage → sessionStorage → mémoire de l'onglet. */
+  var sessionMemoire = null;
+  var niveauStockage = null;      // 'durable' | 'onglet' | 'memoire'
+
+  function essais() {
+    var l = [];
+    try { if (window.localStorage) l.push({ nom: 'durable', magasin: localStorage }); } catch (e) { /* refusé */ }
+    try { if (window.sessionStorage) l.push({ nom: 'onglet', magasin: sessionStorage }); } catch (e) { /* refusé */ }
+    return l;
+  }
+
   function session() {
-    try {
-      var brut = localStorage.getItem(CLE_SESSION);
-      if (!brut) return null;
-      var s = JSON.parse(brut);
-      return (s && s.access_token) ? s : null;
-    } catch (e) { return null; }
+    if (sessionMemoire) return sessionMemoire;
+    var l = essais();
+    for (var i = 0; i < l.length; i++) {
+      try {
+        var brut = l[i].magasin.getItem(CLE_SESSION);
+        if (!brut) continue;
+        var s = JSON.parse(brut);
+        if (s && s.access_token) { sessionMemoire = s; return s; }
+      } catch (e) { /* on essaie le suivant */ }
+    }
+    return null;
   }
 
   function poserSession(s) {
-    try {
-      if (s) localStorage.setItem(CLE_SESSION, JSON.stringify(s));
-      else localStorage.removeItem(CLE_SESSION);
-    } catch (e) { /* navigation privée : la session ne survit pas à l'onglet */ }
+    sessionMemoire = s || null;
+    niveauStockage = 'memoire';
+    var l = essais();
+    for (var i = 0; i < l.length; i++) {
+      try {
+        if (s) l[i].magasin.setItem(CLE_SESSION, JSON.stringify(s));
+        else l[i].magasin.removeItem(CLE_SESSION);
+        if (niveauStockage === 'memoire') niveauStockage = l[i].nom;
+      } catch (e) { /* magasin refusé : on continue */ }
+    }
   }
+
+  /* Dit où la session a pu être gardée, pour prévenir la personne quand elle
+     ne survivra pas au changement de page. */
+  function stockage() { return niveauStockage || (session() ? 'durable' : null); }
 
   function expiree() {
     var s = session();
@@ -346,6 +377,7 @@
   root.LB_NUAGE = {
     connexion: connexion, deconnexion: deconnexion, session: session, courriel: courriel,
     rafraichir: rafraichir, pret: pret, lire: lire, ecrire: ecrire, televerser: televerser,
-    versions: versions, version: version, avantRendu: avantRendu, oublierCopie: oublierCopie
+    versions: versions, version: version, avantRendu: avantRendu, oublierCopie: oublierCopie,
+    stockage: stockage
   };
 })(window);

@@ -700,9 +700,14 @@
   function demarrer() {
     if (!N || !N.session()) {
       var base = document.body.getAttribute('data-base') || '';
+      var bloque = false;
+      try { localStorage.setItem('vd_essai', '1'); localStorage.removeItem('vd_essai'); }
+      catch (e) { bloque = true; }
       document.body.appendChild(el(
         '<div class="vd-porte"><p><b>Cette page sert à modifier le site.</b></p>' +
-        '<p>Connectez-vous d’abord : c’est le même mot de passe que pour la gestion du catalogue.</p>' +
+        (bloque
+          ? '<p>Votre navigateur refuse de retenir la connexion : navigation privée, ou protection contre le pistage. Ouvrez le site dans une fenêtre normale, ou autorisez les données de site pour cette adresse.</p>'
+          : '<p>Connectez-vous d’abord : c’est le même mot de passe que pour la gestion du catalogue.</p>') +
         '<p><a class="vd-b vd-b--plein" href="' + base + 'gestion.html">Se connecter</a></p>' +
         '<p><a class="vd-b" href="' + location.pathname + '">Revenir au site</a></p></div>'));
       return;
