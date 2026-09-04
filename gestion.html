@@ -205,7 +205,10 @@
         <input type="email" name="courriel" autocomplete="username" required placeholder="vous@lesbourguignols.com">
       </label>
       <label>Mot de passe
-        <input type="password" name="motdepasse" autocomplete="current-password" required>
+        <span class="lg-login__mdp">
+          <input type="password" name="motdepasse" autocomplete="current-password" required>
+          <button type="button" id="lg-oeil" aria-label="Afficher le mot de passe" title="Afficher le mot de passe">Voir</button>
+        </span>
       </label>
       <p class="lg-login__error" id="lg-login-error" hidden></p>
       <button class="lg-btn lg-btn--primary lg-btn--block" type="submit">Entrer</button>

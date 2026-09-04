@@ -176,3 +176,14 @@
   /* le site s'ouvre de toute façon depuis le téléphone : on récupère la place */
   .lg-top__actions .lg-btn--ghost { display: none; }
 }
+
+/* Voir le mot de passe qu'on tape */
+.lg-login__mdp { position: relative; display: block; }
+.lg-login__mdp input { padding-right: 62px; }
+.lg-login__mdp button {
+  position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+  font: inherit; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700;
+  padding: 6px 9px; border: 1px solid var(--filet); background: var(--paper); color: var(--ink-2);
+  cursor: pointer;
+}
+.lg-login__mdp button:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }

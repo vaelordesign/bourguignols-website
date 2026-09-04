@@ -505,6 +505,20 @@
     document.body.classList.add('is-locked');
     form.elements.courriel.focus();
 
+    /* Voir ce qu'on tape : sur ce domaine, le navigateur remplit parfois le
+       champ tout seul avec le mot de passe d'un AUTRE site de Vaelor, et on
+       cherche longtemps pourquoi « ça ne marche pas ». */
+    var oeil = $('lg-oeil');
+    if (oeil) oeil.addEventListener('click', function () {
+      var c = form.elements.motdepasse;
+      var montre = c.type === 'password';
+      c.type = montre ? 'text' : 'password';
+      oeil.textContent = montre ? 'Cacher' : 'Voir';
+      oeil.setAttribute('aria-label', montre ? 'Cacher le mot de passe' : 'Afficher le mot de passe');
+      c.focus();
+    });
+
+    var essais = 0;
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       err.hidden = true;
@@ -513,7 +527,12 @@
       N.connexion(form.elements.courriel.value, form.elements.motdepasse.value).then(function () {
         location.reload();
       }).catch(function (ex) {
-        err.textContent = ex.message; err.hidden = false;
+        essais++;
+        var msg = ex.message;
+        if (essais >= 2 && /incorrect/i.test(msg)) {
+          msg += ' Si votre navigateur a rempli le champ tout seul, effacez-le et tapez le mot de passe à la main : cliquez « Voir » pour le vérifier.';
+        }
+        err.textContent = msg; err.hidden = false;
         bouton.disabled = false; bouton.textContent = 'Entrer';
         form.elements.motdepasse.value = '';
         form.elements.motdepasse.focus();
