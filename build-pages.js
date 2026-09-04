@@ -120,4 +120,12 @@ fs.writeFileSync(path.join(RACINE, 'domaine.html'), remplir({
 
 console.log(liste.length + ' pages de domaine écrites dans domaines/, plus domaine.html');
 
+/* Dernière étape : coller le numéro de la mise en ligne sur les js et css de
+   toutes les pages, pour qu'aucun navigateur ne serve l'ancien code depuis
+   son cache après une publication. */
+const { versionner, versionDuJour } = require('./versionner.js');
+const v = versionDuJour();
+const r = versionner(v);
+console.log('Version ' + v + ' posée sur ' + r.liens + ' fichier(s) dans ' + r.pages + ' page(s).');
+
 })();

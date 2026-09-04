@@ -229,17 +229,30 @@
   /* ---------- Le rendu du site public ----------
      On tente la base ; passé le délai (ou en cas de panne), on garde le
      fichier livré avec le site. Puis on charge les scripts de rendu. */
+  /* Le numéro de version de la mise en ligne, lu sur l'adresse de ce fichier
+     même (…/js/nuage.js?v=2609041752). On le recolle sur tout ce qu'on charge
+     ensuite, sinon le navigateur servirait un éditeur périmé pris dans son
+     cache pendant qu'il a déjà le reste à jour. */
+  var VERSION = (function () {
+    var s = document.currentScript;
+    var m = s && /[?&]v=([0-9]+)/.exec(s.src || '');
+    return m ? m[1] : '';
+  })();
+  function versionne(url) {
+    return VERSION ? url + (url.indexOf('?') === -1 ? '?' : '&') + 'v=' + VERSION : url;
+  }
+
   function charger(src) {
     return new Promise(function (ok) {
       var s = document.createElement('script');
-      s.src = src;
+      s.src = versionne(src);
       s.onload = ok; s.onerror = ok;
       document.body.appendChild(s);
     });
   }
   function chargerCss(href) {
     var l = document.createElement('link');
-    l.rel = 'stylesheet'; l.href = href;
+    l.rel = 'stylesheet'; l.href = versionne(href);
     document.head.appendChild(l);
   }
   function base() {
