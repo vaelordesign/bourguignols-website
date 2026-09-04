@@ -541,6 +541,8 @@
       if (qui) { qui.textContent = EN_LIGNE ? N.courriel() : ''; qui.hidden = !EN_LIGNE; }
       var quitter = $('lg-logout');
       if (quitter) quitter.hidden = !EN_LIGNE;
+      var pages = $('lg-pages');
+      if (pages) pages.hidden = !EN_LIGNE;   // l'éditeur visuel exige une connexion
     }
     var reset = $('lg-reset');
     if (reset) reset.textContent = EN_LIGNE ? 'Revenir à une version précédente' : 'Rétablir la version d’origine';

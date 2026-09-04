@@ -198,6 +198,51 @@
   /* ---------- Le rendu du site public ----------
      On tente la base ; passé le délai (ou en cas de panne), on garde le
      fichier livré avec le site. Puis on charge les scripts de rendu. */
+  function charger(src) {
+    return new Promise(function (ok) {
+      var s = document.createElement('script');
+      s.src = src;
+      s.onload = ok; s.onerror = ok;
+      document.body.appendChild(s);
+    });
+  }
+  function chargerCss(href) {
+    var l = document.createElement('link');
+    l.rel = 'stylesheet'; l.href = href;
+    document.head.appendChild(l);
+  }
+  function base() {
+    /* les pages de domaine sont deux dossiers plus bas */
+    return (document.body.getAttribute('data-base') || '');
+  }
+
+  /* Les retouches faites par le client dans l'éditeur visuel, puis
+     l'éditeur lui-même si l'adresse se termine par ?edition. */
+  function apresRendu() {
+    var d = root.LB_DATA || {};
+    var contenu = d.contenu;
+    var edition = /[?&]edition\b/.test(location.search);
+    var b = base();
+    var suite = Promise.resolve();
+
+    var page = contenu && contenu.pages ? (contenu.pages[/\/domaines\//.test(location.pathname) ? 'domaine' : (location.pathname.split('/').pop() || 'index.html')] || {}) : {};
+    var aDesBlocs = (page.ajouts || []).length > 0;
+
+    if (contenu || edition) suite = suite.then(function () { return charger(b + 'editeur/vaelor-contenu.js'); });
+    if (aDesBlocs || edition) {
+      chargerCss(b + 'editeur/vaelor-blocs.css');
+      suite = suite.then(function () { return charger(b + 'editeur/vaelor-blocs.js'); });
+    }
+    suite = suite.then(function () {
+      if (root.VAELOR_CONTENU && contenu && !edition) root.VAELOR_CONTENU.appliquer(contenu);
+    });
+    if (edition) {
+      chargerCss(b + 'editeur/vaelor-editeur.css');
+      suite = suite.then(function () { return charger(b + 'editeur/vaelor-editeur.js'); });
+    }
+    return suite;
+  }
+
   function avantRendu(scripts) {
     var liste = [].concat(scripts || []);
     var fini = false;
@@ -206,7 +251,7 @@
       if (fini) return;
       fini = true;
       (function suivant(i) {
-        if (i >= liste.length) return;
+        if (i >= liste.length) { apresRendu(); return; }
         var s = document.createElement('script');
         s.src = liste[i];
         s.onload = function () { suivant(i + 1); };

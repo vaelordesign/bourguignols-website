@@ -1,5 +1,5 @@
 /* LES BOURGUIGNOLS : DONNÉES DU SITE (domaines, cuvées, arrivages)
-   Copie du contenu publié en ligne, prise le 2026-09-04 17 h 12 min 48 s.
+   Copie du contenu publié en ligne, prise le 2026-09-04 17 h 25 min 32 s.
    Sert de secours quand la base ne répond pas. Ne pas modifier à la main :
    ce fichier est réécrit à chaque « node build-pages.js ». */
 window.LB_DATA = {

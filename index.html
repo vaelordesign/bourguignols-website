@@ -45,36 +45,36 @@
     </div>
   </header>
 
-  <main>
+  <main data-ed-zone="corps">
     <!-- Manchette -->
-    <section class="lb-mast" id="accueil">
+    <section class="lb-mast" id="accueil" data-ed-bloc="accueil" data-ed-nom="Manchette" data-ed-fige>
       <div class="wrap">
         <div class="lb-mast__rule">
-          <p class="eyebrow">Bourgogne · Champagne · Rhône · Provence</p>
-          <h1 class="lb-mast__logo"><img src="images/logo-noir.svg" alt="Les Bourguignols, importation de vins fins, France et Québec" width="540" height="309"></h1>
-          <p class="lb-mast__devise">Vingt-cinq domaines choisis un par un, du nord au sud.</p>
-          <div class="lb-mast__meta">
+          <p class="eyebrow" data-ed="accueil-surtitre">Bourgogne · Champagne · Rhône · Provence</p>
+          <h1 class="lb-mast__logo"><img data-ed="accueil-logo" src="images/logo-noir.svg" alt="Les Bourguignols, importation de vins fins, France et Québec" width="540" height="309"></h1>
+          <p class="lb-mast__devise" data-ed="accueil-devise">Vingt-cinq domaines choisis un par un, du nord au sud.</p>
+          <div class="lb-mast__meta" data-ed="accueil-reperes">
             <span>Fondée en 2016</span><span>Montréal, Québec</span><span>Importation privée</span>
           </div>
         </div>
 
         <div class="lb-une" id="une">
           <div class="lb-une__col lb-une__article rev">
-            <h2>Une agence née d'un manque</h2>
-            <p>Nous avons fondé Les Bourguignols en 2016 pour une raison simple : les vins que nous aimions le plus n'arrivaient pas au Québec. Nous sommes allés les chercher, domaine par domaine, dans les villages où ils naissent.</p>
-            <p>Nous sommes nos propres premiers clients. Chaque cuvée de ce catalogue a été goûtée à la table du vigneron avant de traverser l'Atlantique.</p>
-            <a class="lb-btn lb-btn--vin" href="#domaines">Parcourir les domaines</a>
+            <h2 data-ed="une-titre">Une agence née d'un manque</h2>
+            <p data-ed="une-texte1">Nous avons fondé Les Bourguignols en 2016 pour une raison simple : les vins que nous aimions le plus n'arrivaient pas au Québec. Nous sommes allés les chercher, domaine par domaine, dans les villages où ils naissent.</p>
+            <p data-ed="une-texte2">Nous sommes nos propres premiers clients. Chaque cuvée de ce catalogue a été goûtée à la table du vigneron avant de traverser l'Atlantique.</p>
+            <a class="lb-btn lb-btn--vin" href="#domaines" data-ed="une-bouton">Parcourir les domaines</a>
           </div>
           <div class="lb-une__col lb-une__photo rev">
             <figure>
-              <img src="images/hero.jpg" alt="Vignes de la Côte de Nuits au petit matin" width="1920" height="1072">
-              <figcaption>Côte de Nuits, un matin d'automne. Les domaines représentés s'étirent de Bouzy, en Champagne, jusqu'à La Cadière-d'Azur, en Provence.</figcaption>
+              <img data-ed="une-photo" src="images/hero.jpg" alt="Vignes de la Côte de Nuits au petit matin" width="1920" height="1072">
+              <figcaption data-ed="une-legende">Côte de Nuits, un matin d'automne. Les domaines représentés s'étirent de Bouzy, en Champagne, jusqu'à La Cadière-d'Azur, en Provence.</figcaption>
             </figure>
           </div>
           <div class="lb-une__col rev">
-            <h2>L'itinéraire</h2>
+            <h2 data-ed="itineraire-titre">L'itinéraire</h2>
             <ul class="lb-itin" id="lb-itin"></ul>
-            <p class="lb-itin__foot">Cliquez une région pour n'afficher que ses domaines.</p>
+            <p class="lb-itin__foot" data-ed="itineraire-note">Cliquez une région pour n'afficher que ses domaines.</p>
           </div>
         </div>
       </div>
@@ -83,10 +83,10 @@
     <hr class="filet">
 
     <!-- Les domaines -->
-    <section class="lb-sec" id="domaines">
+    <section class="lb-sec" id="domaines" data-ed-bloc="domaines" data-ed-nom="Les domaines">
       <div class="wrap">
         <div class="lb-sec__head rev">
-          <h2>Les domaines</h2>
+          <h2 data-ed="domaines-titre">Les domaines</h2>
           <div class="lb-sec__line"></div>
           <div class="lb-sec__count" id="lb-count"></div>
         </div>
@@ -102,18 +102,18 @@
     </section>
 
     <!-- Bande photo -->
-    <div class="lb-band">
-      <img src="images/ambiance-degustation.jpg" alt="Verres de bourgogne rouge sur une table de dégustation" loading="lazy">
+    <div class="lb-band" data-ed-bloc="bande" data-ed-nom="Bande photo">
+      <img data-ed="bande-photo" src="images/ambiance-degustation.jpg" alt="Verres de bourgogne rouge sur une table de dégustation" loading="lazy">
       <div class="lb-band__q">
-        <p>« Nous sommes nos propres plus gros clients. »<small>Les fondateurs, 2016</small></p>
+        <p data-ed="bande-citation">« Nous sommes nos propres plus gros clients. »<small>Les fondateurs, 2016</small></p>
       </div>
     </div>
 
     <!-- Arrivages -->
-    <section class="lb-sec lb-arrivages" id="arrivages">
+    <section class="lb-sec lb-arrivages" id="arrivages" data-ed-bloc="arrivages" data-ed-nom="Les arrivages">
       <div class="wrap">
         <div class="lb-sec__head rev">
-          <h2>Les arrivages</h2>
+          <h2 data-ed="arrivages-titre">Les arrivages</h2>
           <div class="lb-sec__line"></div>
           <div class="lb-sec__count" id="lb-arr-meta"></div>
         </div>
@@ -123,10 +123,10 @@
     </section>
 
     <!-- Commander -->
-    <section class="lb-sec" id="commander">
+    <section class="lb-sec" id="commander" data-ed-bloc="commander" data-ed-nom="Commander">
       <div class="wrap">
         <div class="lb-sec__head rev">
-          <h2>Commander en importation privée</h2>
+          <h2 data-ed="commander-titre">Commander en importation privée</h2>
           <div class="lb-sec__line"></div>
           <div class="lb-sec__count">Trois étapes</div>
         </div>
@@ -162,11 +162,11 @@
     </section>
 
     <!-- L'agence -->
-    <section class="lb-sec lb-about" id="apropos">
+    <section class="lb-sec lb-about" id="apropos" data-ed-bloc="apropos" data-ed-nom="L'agence">
       <div class="wrap lb-about__grid">
         <div class="rev">
           <p class="eyebrow">L'agence</p>
-          <h2>Trois amateurs devenus importateurs</h2>
+          <h2 data-ed="apropos-titre">Trois amateurs devenus importateurs</h2>
           <p>Vincent, Michel et Natacha ont fondé Les Bourguignols en juillet 2016, après quelques années à en rêver. L'idée : représenter des domaines dont ils buvaient déjà les vins, et qu'aucune agence ne faisait venir au Québec.</p>
           <p>Dix ans plus tard, le catalogue compte vingt-cinq domaines, presque tous familiaux, presque tous en Bourgogne, avec quelques échappées en Champagne, dans le Rhône et en Provence. Chaque maison entre au catalogue pour une seule raison : nous voulions ses vins dans nos verres.</p>
           <div class="lb-about__facts">
@@ -184,11 +184,11 @@
     </section>
 
     <!-- Contact -->
-    <section class="lb-sec lb-contact" id="contact">
+    <section class="lb-sec lb-contact" id="contact" data-ed-bloc="contact" data-ed-nom="Contact">
       <div class="wrap lb-contact__grid">
         <div class="rev">
           <p class="eyebrow">Contact</p>
-          <h2>Écrivez-nous</h2>
+          <h2 data-ed="contact-titre">Écrivez-nous</h2>
           <p class="lb-contact__lead">Pour recevoir la liste des disponibilités, passer une commande ou simplement parler de Bourgogne.</p>
           <ul class="lb-contact__list">
             <li><span>Courriel</span><span><a href="mailto:contact@lesbourguignols.com">contact@lesbourguignols.com</a></span></li>

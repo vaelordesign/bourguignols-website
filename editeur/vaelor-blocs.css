@@ -1,0 +1,86 @@
+/* ============================================================
+   VAELOR : style des blocs ajoutés par le client.
+   Volontairement discret : presque aucune couleur en dur, tout hérite
+   du site. Un bloc ajouté doit avoir l'air d'avoir toujours été là.
+
+   Le site d'accueil peut peaufiner en redéfinissant ces variables :
+     --vd-accent   couleur d'accent (par défaut : celle du site)
+     --vd-filet    couleur des traits
+     --vd-espace   respiration verticale d'un bloc
+   ============================================================ */
+.vd-bloc {
+  --vd-accent: var(--vin, var(--accent, var(--or, currentColor)));
+  --vd-filet: var(--filet, rgba(0, 0, 0, .16));
+  --vd-espace: 46px;
+  padding: var(--vd-espace) 0;
+}
+.vd-bloc__in { width: min(1180px, 92%); margin: 0 auto; }
+
+.vd-titre { font-family: inherit; margin: 0 0 12px; line-height: 1.15; }
+.vd-texte { line-height: 1.7; }
+.vd-texte p:first-child, .vd-texte > :first-child { margin-top: 0; }
+.vd-texte p:last-child, .vd-texte > :last-child { margin-bottom: 0; }
+.vd-texte a { color: var(--vd-accent); }
+
+.vd-vide {
+  display: flex; align-items: center; justify-content: center; min-height: 150px;
+  border: 1px dashed var(--vd-filet); color: inherit; opacity: .55; font-size: 13px; text-align: center; padding: 20px;
+}
+
+/* Image seule */
+.vd-image { margin: 0; }
+.vd-image img { display: block; width: 100%; height: auto; }
+.vd-image figcaption { font-size: 12.5px; opacity: .7; margin-top: 8px; }
+
+/* Texte à côté d'une image */
+.vd-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+.vd-duo--inverse .vd-duo__img { order: -1; }
+.vd-duo__img img { display: block; width: 100%; height: auto; }
+
+/* Galerie */
+.vd-galerie { display: grid; grid-template-columns: repeat(var(--vd-cols, 3), 1fr); gap: 14px; }
+.vd-galerie img { display: block; width: 100%; height: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+
+/* Citation */
+.vd-citation { margin: 0; padding: 6px 0 6px 26px; border-left: 2px solid var(--vd-accent); font-size: 1.15em; line-height: 1.5; }
+.vd-citation cite { display: block; margin-top: 12px; font-size: .72em; font-style: normal; letter-spacing: .16em; text-transform: uppercase; opacity: .7; }
+
+/* Bouton */
+.vd-boutonwrap { margin: 0; }
+.vd-bouton {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 13px 26px; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; font-weight: 700;
+  text-decoration: none; border: 1px solid var(--vd-accent); transition: background .2s, color .2s;
+}
+.vd-bouton--plein { background: var(--vd-accent); color: #fff; }
+.vd-bouton--plein:hover { filter: brightness(1.12); }
+.vd-bouton--contour { background: transparent; color: var(--vd-accent); }
+.vd-bouton--contour:hover { background: var(--vd-accent); color: #fff; }
+
+/* Liste (horaires, prix) */
+.vd-liste dl { margin: 0; }
+.vd-liste__l { display: flex; justify-content: space-between; gap: 20px; align-items: baseline; padding: 10px 0; border-bottom: 1px solid var(--vd-filet); }
+.vd-liste__l dt { margin: 0; }
+.vd-liste__l dd { margin: 0; text-align: right; opacity: .85; }
+
+/* Encadré */
+.vd-encadre { border: 1px solid var(--vd-filet); padding: 24px 26px; }
+.vd-encadre .vd-titre { font-size: 1.15em; }
+
+/* Vidéo */
+.vd-video { position: relative; padding-top: 56.25%; }
+.vd-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+/* Séparateurs */
+.vd-sep--simple { border-top: 1px solid var(--vd-filet); }
+.vd-sep--double { border-top: 3px double var(--vd-filet); }
+.vd-sep--espace { height: 10px; }
+
+@media (max-width: 767px) {
+  .vd-bloc { --vd-espace: 32px; }
+  .vd-duo { grid-template-columns: 1fr; gap: 22px; }
+  .vd-duo--inverse .vd-duo__img { order: 0; }
+  .vd-galerie { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .vd-liste__l { flex-direction: column; gap: 2px; }
+  .vd-liste__l dd { text-align: left; }
+}

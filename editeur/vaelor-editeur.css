@@ -1,0 +1,151 @@
+/* ============================================================
+   VAELOR : habillage de l'éditeur. Chargé seulement en mode édition.
+   Volontairement neutre et sombre, pour ne jamais être confondu avec
+   le site du client qu'il entoure.
+   ============================================================ */
+.vd-edition { padding-top: 52px !important; }
+
+/* ---------- La barre du haut ---------- */
+.vd-barre {
+  position: fixed; top: 0; left: 0; right: 0; height: 52px; z-index: 99999;
+  display: flex; align-items: center; gap: 10px; padding: 0 14px;
+  background: #17161a; color: #f2f0ec; font: 500 13px/1.2 system-ui, -apple-system, "Segoe UI", sans-serif;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .08);
+}
+.vd-barre__marque { font-weight: 700; letter-spacing: .18em; text-transform: uppercase; font-size: 10.5px; opacity: .65; }
+.vd-barre__espace { flex: 1; }
+.vd-etat { font-size: 12px; color: #7fd18f; }
+.vd-etat--sale { color: #ffc46b; }
+
+.vd-b {
+  font: inherit; font-size: 12.5px; padding: 8px 13px; border-radius: 6px; cursor: pointer;
+  background: rgba(255, 255, 255, .09); color: #f2f0ec; border: 1px solid rgba(255, 255, 255, .14);
+  transition: background .15s, opacity .15s; white-space: nowrap;
+}
+.vd-b:hover:not(:disabled) { background: rgba(255, 255, 255, .17); }
+.vd-b:disabled { opacity: .38; cursor: default; }
+.vd-b--plein { background: #4f7cff; border-color: #4f7cff; color: #fff; font-weight: 600; }
+.vd-b--plein:hover:not(:disabled) { background: #6a90ff; }
+.vd-b--vert { background: rgba(127, 209, 143, .16); border-color: rgba(127, 209, 143, .3); }
+.vd-b--rouge { background: rgba(255, 106, 106, .16); border-color: rgba(255, 106, 106, .34); color: #ffb3b3; }
+.vd-b--large { width: 100%; margin-bottom: 10px; }
+
+/* ---------- Ce qui est modifiable ---------- */
+.vd-edition .vd-cible { outline: 1px dashed transparent; outline-offset: 3px; transition: outline-color .12s, background .12s; cursor: text; }
+.vd-edition .vd-cible:hover { outline-color: rgba(79, 124, 255, .5); background: rgba(79, 124, 255, .05); }
+.vd-edition img.vd-cible, .vd-edition .vd-cible[style*="background-image"] { cursor: pointer; }
+.vd-edition .vd-choisi { outline: 2px solid #4f7cff !important; outline-offset: 3px; background: transparent; }
+.vd-edition .vd-ecrit { outline: 2px solid #4f7cff !important; background: rgba(79, 124, 255, .06); }
+.vd-edition .vd-ecrit:focus { outline: 2px solid #4f7cff !important; }
+
+.vd-edition .vd-blocmod { position: relative; }
+.vd-edition .vd-blocmod::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  outline: 1px dashed rgba(0, 0, 0, .16); outline-offset: -1px; opacity: 0; transition: opacity .12s;
+}
+.vd-edition .vd-blocmod:hover::after { opacity: 1; }
+.vd-edition .vd-blocmod.vd-choisi::after { opacity: 1; outline: 2px solid #4f7cff; }
+
+.vd-etiquette {
+  position: absolute; top: 0; left: 0; z-index: 20; pointer-events: none;
+  background: #4f7cff; color: #fff; font: 600 10.5px/1 system-ui, sans-serif;
+  letter-spacing: .1em; text-transform: uppercase; padding: 5px 9px; opacity: 0; transition: opacity .12s;
+}
+.vd-edition .vd-blocmod:hover > .vd-etiquette,
+.vd-edition .vd-blocmod.vd-choisi > .vd-etiquette { opacity: 1; }
+
+.vd-edition .vd-est-cache { opacity: .34; }
+.vd-edition .vd-est-cache > .vd-etiquette { background: #8a8a8a; }
+.vd-edition .vd-est-cache > .vd-etiquette span::after { content: " · caché"; }
+
+/* ---------- Zones d'ajout ---------- */
+.vd-edition .vd-zone { position: relative; }
+.vd-ajout {
+  display: block; width: min(1180px, 92%); margin: 18px auto; padding: 14px;
+  border: 2px dashed rgba(79, 124, 255, .45); background: rgba(79, 124, 255, .05); color: #4f7cff;
+  font: 600 12.5px system-ui, sans-serif; letter-spacing: .06em; cursor: pointer; border-radius: 8px;
+}
+.vd-ajout:hover { background: rgba(79, 124, 255, .12); }
+
+/* ---------- Panneau de droite ---------- */
+.vd-panneau {
+  position: fixed; top: 52px; right: 0; bottom: 0; width: 320px; z-index: 99998;
+  background: #1e1d22; color: #eceaf0; overflow: auto;
+  font: 400 13px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+  box-shadow: -8px 0 26px rgba(0, 0, 0, .28);
+}
+.vd-panneau__t { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid rgba(255, 255, 255, .1); position: sticky; top: 0; background: #1e1d22; }
+.vd-panneau__t b { font-size: 14px; }
+.vd-panneau__c { padding: 16px; }
+.vd-x { background: none; border: 0; color: #eceaf0; font-size: 22px; line-height: 1; cursor: pointer; opacity: .6; padding: 0 4px; }
+.vd-x:hover { opacity: 1; }
+
+.vd-outils { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 18px; }
+.vd-outils .vd-b { width: 100%; }
+.vd-outils .vd-b--rouge { grid-column: 1 / -1; }
+
+.vd-reglages { border-top: 1px solid rgba(255, 255, 255, .1); padding-top: 14px; margin-top: 14px; }
+.vd-reglages h4 { margin: 0 0 12px; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; opacity: .55; font-weight: 700; }
+.vd-champ { display: block; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; opacity: .75; margin-bottom: 14px; }
+.vd-champ input[type="text"], .vd-champ input[type="number"], .vd-champ select {
+  display: block; width: 100%; margin-top: 5px; font: inherit; font-size: 13px; text-transform: none; letter-spacing: normal;
+  padding: 8px 10px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, .16); background: rgba(255, 255, 255, .06); color: #eceaf0;
+}
+.vd-champ--curseur span, .vd-champ--coul span { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.vd-champ--curseur input[type="range"] { flex: 1; accent-color: #4f7cff; }
+.vd-champ--curseur output { font-size: 11px; opacity: .8; min-width: 48px; text-transform: none; }
+.vd-champ--coul input[type="color"] { width: 42px; height: 30px; padding: 0; border: 1px solid rgba(255, 255, 255, .18); border-radius: 6px; background: none; cursor: pointer; }
+.vd-mini { font: inherit; font-size: 10.5px; padding: 5px 8px; border-radius: 5px; cursor: pointer; background: rgba(255, 255, 255, .08); color: #eceaf0; border: 1px solid rgba(255, 255, 255, .14); text-transform: none; }
+.vd-mini:hover { background: rgba(255, 255, 255, .16); }
+.vd-aide { font-size: 12px; opacity: .6; margin: 0 0 14px; line-height: 1.5; }
+
+.vd-lignes { display: grid; gap: 8px; }
+.vd-ligne { display: grid; grid-template-columns: 1fr 1fr auto; gap: 6px; }
+.vd-ligne input { font: inherit; font-size: 12px; padding: 7px 8px; border-radius: 5px; border: 1px solid rgba(255, 255, 255, .16); background: rgba(255, 255, 255, .06); color: #eceaf0; }
+
+/* ---------- Barre de mise en forme du texte ---------- */
+.vd-format {
+  position: absolute; z-index: 99999; transform: translateX(-50%);
+  background: #17161a; border-radius: 7px; padding: 4px; display: flex; gap: 2px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .35);
+}
+.vd-format button { background: none; border: 0; color: #f2f0ec; width: 32px; height: 30px; border-radius: 5px; cursor: pointer; font-size: 13px; }
+.vd-format button:hover { background: rgba(255, 255, 255, .15); }
+
+/* ---------- Choix d'un bloc ---------- */
+.vd-modale { position: fixed; inset: 0; z-index: 100000; background: rgba(15, 14, 18, .6); display: flex; align-items: center; justify-content: center; padding: 20px; }
+.vd-modale__b { background: #1e1d22; color: #eceaf0; border-radius: 12px; width: min(620px, 100%); max-height: 82vh; overflow: auto; font: 400 13px system-ui, sans-serif; }
+.vd-modale__b header { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; border-bottom: 1px solid rgba(255, 255, 255, .1); position: sticky; top: 0; background: #1e1d22; }
+.vd-cartes { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; padding: 18px; }
+.vd-carte {
+  display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 18px 10px;
+  background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .12); border-radius: 9px;
+  color: #eceaf0; font: inherit; font-size: 12.5px; cursor: pointer; text-align: center;
+}
+.vd-carte:hover { background: rgba(79, 124, 255, .18); border-color: #4f7cff; }
+.vd-carte__i { font-size: 22px; opacity: .8; }
+
+/* ---------- Message ---------- */
+.vd-toast {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 100001;
+  background: #17161a; color: #f2f0ec; padding: 12px 20px; border-radius: 8px;
+  font: 500 13px system-ui, sans-serif; box-shadow: 0 8px 26px rgba(0, 0, 0, .32); max-width: 90vw; text-align: center;
+}
+
+/* ---------- Aperçu : on efface tous les repères ---------- */
+.vd-apercu .vd-cible, .vd-apercu .vd-blocmod::after, .vd-apercu .vd-choisi { outline: none !important; background: none; }
+.vd-apercu .vd-etiquette, .vd-apercu .vd-ajout, .vd-apercu .vd-panneau { display: none !important; }
+.vd-apercu .vd-est-cache { display: none !important; }
+
+/* ---------- Porte fermée ---------- */
+.vd-porte { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; font: 400 15px system-ui, sans-serif; background: #f4f2ee; color: #17161a; text-align: center; padding: 24px; }
+.vd-porte .vd-b { text-decoration: none; display: inline-block; }
+
+@media (max-width: 900px) {
+  /* le panneau se pose en bas : on le garde bas pour laisser voir la page */
+  .vd-panneau { top: auto; left: 0; right: 0; bottom: 0; width: auto; max-height: 46vh; box-shadow: 0 -8px 26px rgba(0, 0, 0, .28); border-top-left-radius: 14px; border-top-right-radius: 14px; }
+  .vd-panneau__c { padding-bottom: 26px; }
+  .vd-barre { gap: 6px; padding: 0 8px; }
+  .vd-barre__marque, .vd-etat { display: none; }
+  .vd-b { padding: 8px 10px; font-size: 12px; }
+}
