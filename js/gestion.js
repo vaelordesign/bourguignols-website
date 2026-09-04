@@ -520,11 +520,18 @@
       });
     });
 
-    $('lg-login-demo').addEventListener('click', function () {
-      voile.hidden = true;
-      document.body.classList.remove('is-locked');
-      demarrer(charger(), false);
-    });
+    var demo = $('lg-login-demo');
+    /* Le mode démonstration ne sert qu'aux démos de vente. Sur un site livré
+       (config.demo à false), personne ne fouille l'interface sans compte. */
+    if (!window.LB_CONFIG || window.LB_CONFIG.demo !== true) {
+      demo.hidden = true;
+    } else {
+      demo.addEventListener('click', function () {
+        voile.hidden = true;
+        document.body.classList.remove('is-locked');
+        demarrer(charger(), false);
+      });
+    }
   }
 
   /* ---------- Départ ---------- */

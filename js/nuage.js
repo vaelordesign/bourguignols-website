@@ -237,10 +237,71 @@
       if (root.VAELOR_CONTENU && contenu && !edition) root.VAELOR_CONTENU.appliquer(contenu);
     });
     if (edition) {
+      var noindex = document.createElement('meta');   // jamais dans Google en mode édition
+      noindex.name = 'robots'; noindex.content = 'noindex, nofollow';
+      document.head.appendChild(noindex);
       chargerCss(b + 'editeur/vaelor-editeur.css');
       suite = suite.then(function () { return charger(b + 'editeur/vaelor-editeur.js'); });
+    } else {
+      suite = suite.then(pastille);
     }
     return suite;
+  }
+
+  /* La pastille du propriétaire : elle n'apparaît QUE pour une personne
+     connectée. Un visiteur ordinaire ne la voit jamais et ne sait même pas
+     qu'un panneau de contrôle existe. C'est l'équivalent de la barre noire
+     de WordPress, en beaucoup plus discret. */
+  function pastille() {
+    if (!session() || document.getElementById('lb-pastille')) return;
+    var b = base();
+    var d = document.createElement('div');
+    d.id = 'lb-pastille';
+    d.innerHTML =
+      '<a href="' + b + 'gestion.html">Panneau</a>' +
+      '<a href="' + location.pathname + '?edition">Modifier cette page</a>' +
+      '<button type="button" title="Masquer jusqu’à la prochaine visite">×</button>';
+    d.setAttribute('style', [
+      'position:fixed', 'right:14px', 'bottom:14px', 'z-index:9998', 'display:flex',
+      'align-items:center', 'gap:2px', 'padding:4px', 'border-radius:9px',
+      'background:#17161a', 'box-shadow:0 6px 22px rgba(0,0,0,.28)',
+      'font:600 12px/1 system-ui,-apple-system,"Segoe UI",sans-serif'
+    ].join(';'));
+    [].forEach.call(d.children, function (n) {
+      n.setAttribute('style', [
+        'color:#f2f0ec', 'text-decoration:none', 'padding:8px 11px', 'border-radius:6px',
+        'background:none', 'border:0', 'cursor:pointer', 'font:inherit', 'white-space:nowrap'
+      ].join(';'));
+      n.addEventListener('mouseenter', function () { n.style.background = 'rgba(255,255,255,.14)'; });
+      n.addEventListener('mouseleave', function () { n.style.background = 'none'; });
+    });
+    d.lastElementChild.addEventListener('click', function () {
+      d.remove();
+      try { sessionStorage.setItem('lb_pastille_off', '1'); } catch (e) { /* rien */ }
+    });
+    try { if (sessionStorage.getItem('lb_pastille_off')) return; } catch (e) { /* rien */ }
+    document.body.appendChild(d);
+
+    /* On la remonte si un bandeau occupe déjà le bas de l'écran. */
+    function placer() {
+      var bas = 14;
+      [].forEach.call(document.querySelectorAll('body > *'), function (n) {
+        if (n === d) return;
+        var st = getComputedStyle(n);
+        /* attention : offsetParent est nul sur un élément fixe, on ne peut pas
+           s'en servir pour savoir s'il est affiché */
+        if (st.position !== 'fixed' || st.display === 'none' || st.visibility === 'hidden') return;
+        var r = n.getBoundingClientRect();
+        if (!r.height) return;
+        if (r.bottom >= innerHeight - 2 && r.height < innerHeight / 2 && r.width > innerWidth / 2) {
+          bas = Math.max(bas, Math.round(r.height) + 12);
+        }
+      });
+      d.style.bottom = bas + 'px';
+    }
+    placer();
+    addEventListener('resize', placer);
+    setTimeout(placer, 600);   // le temps que les bandeaux se posent
   }
 
   function avantRendu(scripts) {
