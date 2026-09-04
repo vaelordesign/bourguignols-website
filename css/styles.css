@@ -62,8 +62,13 @@
 /* ---------- Navigation ---------- */
 .lb-nav { position: sticky; top: 0; z-index: 40; background: rgba(244, 239, 228, .94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--filet); }
 .lb-nav .wrap { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; min-height: 76px; gap: 12px; }
-.lb-nav__logo { grid-column: 2; display: block; width: 150px; padding: 12px 0; }
-.lb-nav__logo img { width: 100%; height: auto; }
+/* Le logo a quitté la barre. Sur l'accueil elle ne garde que ses liens : le
+   logo de la manchette est juste dessous, l'écrire deux fois faisait double
+   emploi. Sur les pages de domaine, où il n'y a pas de manchette, le nom en
+   toutes lettres tient la place et ramène à l'accueil. */
+.lb-nav__nom { grid-column: 2; font-family: var(--serif); font-size: 22px; letter-spacing: .03em; color: var(--ink); text-decoration: none; white-space: nowrap; padding: 12px 20px; }
+.lb-nav__nom:hover { color: var(--vin); }
+.lb-nav .wrap:not(:has(.lb-nav__nom)) { gap: 40px; }
 .lb-nav__links { display: flex; gap: 26px; list-style: none; margin: 0; padding: 0; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; font-weight: 600; }
 .lb-nav__links--left { grid-column: 1; justify-content: flex-end; }
 .lb-nav__links--right { grid-column: 3; justify-content: flex-start; }
@@ -86,7 +91,7 @@
   font-size: clamp(56px, 11vw, 150px); font-weight: 500; letter-spacing: -.01em; line-height: .95; margin: 8px 0 6px;
 }
 .lb-mast__title em { font-style: italic; font-weight: 400; color: var(--vin); }
-.lb .lb-mast__logo { display: block; width: min(680px, 88%); margin: 22px auto 6px; }
+.lb .lb-mast__logo { display: block; width: min(330px, 66%); margin: 18px auto 4px; }
 .lb .lb-mast__logo img { display: block; width: 100%; height: auto; margin: 0 auto; }
 .lb-mast__devise { font-family: var(--serif); font-style: italic; font-size: clamp(20px, 2.6vw, 30px); color: var(--ink-2); margin: 10px 0 0; }
 .lb-mast__meta { display: flex; justify-content: center; gap: 26px; flex-wrap: wrap; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-2); margin-top: 22px; }
@@ -301,7 +306,7 @@ body.lb-noscroll { overflow: hidden; }
 /* ---------- Tablette ---------- */
 @media (max-width: 1024px) {
   .lb-nav__links { gap: 16px; font-size: 11px; letter-spacing: .14em; white-space: nowrap; }
-  .lb-nav__logo { width: 130px; }
+  .lb-nav__nom { font-size: 20px; }
   .lb-une { grid-template-columns: 1fr 1fr; }
   .lb-une__col:nth-child(3) { grid-column: 1 / -1; border-left: 0; padding-left: 0; border-top: 1px solid var(--filet-2); padding-top: 22px; }
   .lb-itin { columns: 2; column-gap: 40px; }
@@ -319,7 +324,7 @@ body.lb-noscroll { overflow: hidden; }
   .lb { font-size: 15px; }
   .lb-topline .wrap { justify-content: center; text-align: center; font-size: 10px; }
   .lb-nav .wrap { grid-template-columns: 1fr auto; min-height: 66px; }
-  .lb-nav__logo { grid-column: 1; width: 128px; justify-self: start; }
+  .lb-nav__nom { grid-column: 1; justify-self: start; font-size: 19px; padding-left: 0; }
   .lb-nav__burger { display: block; grid-column: 2; }
   .lb-nav__links { display: none; }
   .lb-nav.is-open .lb-nav__links { display: flex; flex-direction: column; gap: 0; grid-column: 1 / -1; justify-content: flex-start; padding: 6px 0 14px; }
