@@ -1,0 +1,30 @@
+# Sur le forfait gratuit de Supabase, un projet sans activité pendant 7 jours
+# est mis en veille : le site n'afficherait alors plus le contenu publié par
+# l'agence (il retomberait sur le fichier de secours). Cette tâche interroge
+# la base tous les jours pour l'en empêcher, et prévient si elle ne répond pas.
+name: Garder la base éveillée
+
+on:
+  schedule:
+    - cron: '17 11 * * *'   # tous les jours vers 6 h 17, heure de Montréal
+  workflow_dispatch:         # et à la demande, depuis l'onglet Actions
+
+jobs:
+  reveiller:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Interroger la base
+        run: |
+          URL="https://mumqsvwiiqynhhxluade.supabase.co/rest/v1/sites?id=eq.bourguignols&select=nom,maj_le"
+          CLE="sb_publishable_EtRyFIKVhm6GKAZoAdh2Ng_84acEvNb"
+          reponse=$(curl -s -w '\n%{http_code}' "$URL" -H "apikey: $CLE")
+          corps=$(echo "$reponse" | head -n -1)
+          code=$(echo "$reponse" | tail -n 1)
+          echo "HTTP $code"
+          echo "$corps"
+          if [ "$code" != "200" ]; then
+            echo "::error::La base des Bourguignols ne répond pas (HTTP $code). Le site sert son contenu de secours."
+            exit 1
+          fi
+          echo "$corps" | grep -q '"nom"' || { echo "::error::Réponse inattendue : le site est-il encore dans la base ?"; exit 1; }
+          echo "La base répond, le site affiche bien le contenu publié."
