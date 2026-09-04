@@ -1,14 +1,15 @@
 /* ============================================================
    build-pages.js : fabrique une page par domaine
-   Usage : node build-pages.js
-   - lit js/domaines-data.js et templates/domaine.template.html
+   Usage : node build-pages.js   (ajouter --hors-ligne pour ignorer la base)
+   - lit le contenu publié dans la base en ligne, et met à jour au passage
+     js/domaines-data.js, le filet de secours du site
    - écrit domaines/<id>/index.html pour chaque domaine visible
      (adresse : https://vaelordesign.github.io/bourguignols-website/domaines/<id>/)
    - écrit domaine.html (page générique, ?id=..., pour les domaines
      ajoutés dans le module de gestion avant la prochaine construction)
-   - supprime les pages des domaines retirés du fichier de données
-   À relancer après chaque nouveau domaines-data.js (export du module
-   de gestion), avant de pousser sur GitHub.
+   - supprime les pages des domaines retirés du catalogue
+   Utile de le relancer de temps en temps : les pages de domaine gardent alors
+   leur texte en dur dans le HTML, ce que Google préfère.
    ============================================================ */
 const fs = require('fs');
 const path = require('path');
@@ -16,9 +17,50 @@ const path = require('path');
 const RACINE = __dirname;
 const SITE = 'https://vaelordesign.github.io/bourguignols-website/';
 
-const window = {};
-new Function('window', fs.readFileSync(path.join(RACINE, 'js/domaines-data.js'), 'utf8'))(window);
-const DATA = window.LB_DATA;
+/* Les données viennent de la BASE EN LIGNE (ce que l'agence a publié dans le
+   module de gestion). Si elle ne répond pas, on se rabat sur le fichier
+   js/domaines-data.js livré avec le site. Après une lecture réussie, ce fichier
+   est réécrit : il reste ainsi le filet de secours à jour du site.
+   Pour construire sans toucher au réseau : node build-pages.js --hors-ligne */
+function duFichier() {
+  const w = {};
+  new Function('window', fs.readFileSync(path.join(RACINE, 'js/domaines-data.js'), 'utf8'))(w);
+  return w.LB_DATA;
+}
+
+async function chargerDonnees() {
+  if (process.argv.includes('--hors-ligne')) {
+    console.log('Données : fichier local (--hors-ligne).');
+    return duFichier();
+  }
+  const cfg = {};
+  new Function('window', fs.readFileSync(path.join(RACINE, 'js/config.js'), 'utf8'))(cfg);
+  const C = cfg.LB_CONFIG;
+  try {
+    const r = await fetch(C.url + '/rest/v1/sites?id=eq.' + C.site + '&select=donnees,maj_le',
+      { headers: { apikey: C.cle, Authorization: 'Bearer ' + C.cle } });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const rows = await r.json();
+    if (!rows.length || !rows[0].donnees || !Array.isArray(rows[0].donnees.domaines)) throw new Error('contenu inutilisable');
+    const d = rows[0].donnees;
+    delete d.maj_le;
+    const entete = '/* LES BOURGUIGNOLS : DONNÉES DU SITE (domaines, cuvées, arrivages)\n' +
+      '   Copie du contenu publié en ligne, prise le ' + new Date().toLocaleString('fr-CA') + '.\n' +
+      '   Sert de secours quand la base ne répond pas. Ne pas modifier à la main :\n' +
+      '   ce fichier est réécrit à chaque « node build-pages.js ». */\n';
+    fs.writeFileSync(path.join(RACINE, 'js/domaines-data.js'),
+      entete + 'window.LB_DATA = ' + JSON.stringify(d, null, 2) + ';\n', 'utf8');
+    console.log('Données : base en ligne (publiée le ' + new Date(rows[0].maj_le).toLocaleString('fr-CA') + '), fichier de secours mis à jour.');
+    return d;
+  } catch (e) {
+    console.log('Données : base injoignable (' + e.message + '), on garde le fichier local.');
+    return duFichier();
+  }
+}
+
+void (async () => {
+
+const DATA = await chargerDonnees();
 const { renderFiche, photoUrl, esc } = require('./js/fiche.js').LB_FICHE;
 const gabarit = fs.readFileSync(path.join(RACINE, 'templates/domaine.template.html'), 'utf8');
 
@@ -77,3 +119,5 @@ fs.writeFileSync(path.join(RACINE, 'domaine.html'), remplir({
 }), 'utf8');
 
 console.log(liste.length + ' pages de domaine écrites dans domaines/, plus domaine.html');
+
+})();

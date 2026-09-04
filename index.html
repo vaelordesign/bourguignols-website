@@ -265,9 +265,11 @@
     <button aria-label="Fermer le bandeau" id="lb-demo-close">×</button>
   </div>
 
+  <!-- On tente d'abord la version en ligne (modifiée par l'agence dans le module de
+       gestion) ; si la base ne répond pas, on garde celle livrée avec le site. -->
   <script src="js/domaines-data.js"></script>
-  <script src="js/fiche.js"></script>
-  <script src="js/pdf-liste.js"></script>
-  <script src="js/script.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/nuage.js"></script>
+  <script>LB_NUAGE.avantRendu(['js/fiche.js', 'js/pdf-liste.js', 'js/script.js']);</script>
 </body>
 </html>

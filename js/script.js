@@ -9,9 +9,16 @@
   'use strict';
 
   var STORAGE_KEY = 'lb_domaines_v1';
-  /* ---------- Données ---------- */
+  /* ---------- Données ----------
+     Ordre de priorité :
+     1. la base en ligne (window.LB_DATA remplacé par nuage.js) : c'est la vérité ;
+     2. sinon, la version bricolée dans le module en mode démonstration ;
+     3. sinon, le fichier livré avec le site.
+     Sans le point 1 en tête, une démonstration faite sur un poste masquerait
+     le vrai contenu du site pour la personne qui l'a faite. */
   function chargerDonnees() {
     var base = window.LB_DATA || { regions: [], domaines: [] };
+    if (window.LB_SOURCE === 'base' || window.LB_SOURCE === 'copie') return base;
     try {
       var brut = localStorage.getItem(STORAGE_KEY);
       if (brut) {

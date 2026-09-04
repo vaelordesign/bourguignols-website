@@ -22,14 +22,16 @@
       </div>
     </div>
     <div class="lg-top__actions">
+      <span class="lg-who" id="lg-who" hidden></span>
       <span class="lg-status" id="lg-status">Tout est enregistré</span>
       <a class="lg-btn lg-btn--ghost" href="index.html" target="_blank" rel="noopener">Voir le site ↗</a>
       <button class="lg-btn lg-btn--primary" id="lg-save" type="button">Enregistrer</button>
+      <button class="lg-link" id="lg-logout" type="button" hidden>Se déconnecter</button>
     </div>
   </header>
 
-  <div class="lg-notice">
-    <b>Mode démonstration.</b> Ce que vous changez ici s'affiche tout de suite sur le site, dans ce navigateur. Dans la version finale sur WordPress, cet écran devient le tableau de bord de l'agence (menus « Domaines » et « Arrivages »), avec les mêmes champs, et les changements sont visibles par tout le monde.
+  <div class="lg-notice" id="lg-bandeau" hidden>
+    <b>Mode démonstration.</b> Personne n'est connecté : ce que vous changez ici reste dans ce navigateur et le public ne le voit pas. Connectez-vous (rechargez la page) pour publier vos changements sur le site.
   </div>
 
   <div class="lg-layout">
@@ -47,8 +49,8 @@
       <p class="lg-list__hint" id="lg-hint">Du nord au sud. Utilisez les flèches de la fiche pour changer l'ordre.</p>
       <ol class="lg-items" id="lg-items"></ol>
       <div class="lg-list__foot">
-        <button class="lg-link" id="lg-export" type="button">Exporter le fichier de données</button>
-        <button class="lg-link lg-link--danger" id="lg-reset" type="button">Rétablir la version d'origine</button>
+        <button class="lg-link" id="lg-export" type="button">Exporter une copie des données</button>
+        <button class="lg-link lg-link--danger" id="lg-reset" type="button">Revenir à une version précédente</button>
       </div>
     </aside>
 
@@ -192,7 +194,28 @@
 
   <div class="lg-toast" id="lg-toast" hidden></div>
 
+  <!-- Porte d'entrée : sans compte, on ne modifie rien du site public. -->
+  <div class="lg-login" id="lg-login" hidden>
+    <form class="lg-login__box" id="lg-login-form" autocomplete="on">
+      <img src="images/logo-noir.svg" alt="Les Bourguignols" width="150" height="86">
+      <h1>Gestion du site</h1>
+      <p class="lg-login__sub">Domaines, cuvées et arrivages.</p>
+      <label>Courriel
+        <input type="email" name="courriel" autocomplete="username" required placeholder="vous@lesbourguignols.com">
+      </label>
+      <label>Mot de passe
+        <input type="password" name="motdepasse" autocomplete="current-password" required>
+      </label>
+      <p class="lg-login__error" id="lg-login-error" hidden></p>
+      <button class="lg-btn lg-btn--primary lg-btn--block" type="submit">Entrer</button>
+      <button class="lg-link" id="lg-login-demo" type="button">Regarder sans se connecter (démonstration)</button>
+      <p class="lg-login__note">Mot de passe oublié ou nouvel accès à créer : écrivez à Vaelor Design.</p>
+    </form>
+  </div>
+
   <script src="js/domaines-data.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/nuage.js"></script>
   <script src="js/fiche.js"></script>
   <script src="js/pdf-liste.js"></script>
   <script src="js/gestion.js"></script>

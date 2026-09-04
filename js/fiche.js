@@ -105,6 +105,8 @@
 
   function charger() {
     var b = root.LB_DATA || { regions: [], domaines: [] };
+    /* la base en ligne passe avant la version de démonstration du navigateur */
+    if (root.LB_SOURCE === 'base' || root.LB_SOURCE === 'copie') return b;
     try {
       var brut = localStorage.getItem('lb_domaines_v1');
       if (brut) { var p = JSON.parse(brut); if (p && Array.isArray(p.domaines)) return p; }

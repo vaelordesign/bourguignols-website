@@ -1,15 +1,21 @@
 /* ============================================================
-   LES BOURGUIGNOLS : module de gestion (démonstration)
+   LES BOURGUIGNOLS : module de gestion
    Onglet Domaines : ajouter, modifier, retirer des domaines et leurs cuvées.
    Onglet Arrivages : le bloc « Prochain arrivage » de l'accueil.
-   Les changements sont gardés dans le navigateur (localStorage) et lus
-   par toutes les pages du site. « Exporter » produit le fichier
-   domaines-data.js à remettre dans le dossier js/ (puis node build-pages.js).
+
+   Deux modes :
+   - CONNECTÉ : les changements partent dans la base en ligne et le site
+     public les affiche pour tout le monde, dans la seconde. C'est le mode
+     normal du propriétaire du site.
+   - DÉMONSTRATION (personne n'est connectée) : les changements restent dans
+     ce navigateur seulement. Sert à montrer le module sans rien publier.
    ============================================================ */
 (function () {
   'use strict';
 
   var STORAGE_KEY = 'lb_domaines_v1';
+  var N = window.LB_NUAGE;
+  var EN_LIGNE = false;   // vrai dès qu'une personne est connectée
   var COULEURS = ['rouge', 'blanc', 'rosé', 'effervescent'];
   var $ = function (id) { return document.getElementById(id); };
   var F = window.LB_FICHE;
@@ -45,19 +51,32 @@
   function marquer(dirty) {
     sale = dirty;
     var s = $('lg-status');
-    s.textContent = dirty ? 'Modifications non enregistrées' : 'Tout est enregistré';
+    if (dirty) s.textContent = 'Modifications non enregistrées';
+    else s.textContent = EN_LIGNE ? 'Tout est publié' : 'Tout est enregistré (ce navigateur)';
     s.classList.toggle('is-dirty', dirty);
   }
   function enregistrer() {
     renumeroter();
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
-      marquer(false);
-      toast('Enregistré. Le site affiche maintenant vos changements.');
-    } catch (e) {
-      toast('Impossible d’enregistrer : le navigateur refuse (photos trop lourdes ou stockage désactivé).');
+    if (!EN_LIGNE) {                       // mode démonstration
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
+        marquer(false);
+        toast('Enregistré dans ce navigateur (mode démonstration : le public ne le voit pas).');
+      } catch (e) {
+        toast('Impossible d’enregistrer : le navigateur refuse (photos trop lourdes ou stockage désactivé).');
+      }
+      rendreListe();
+      return;
     }
-    rendreListe();
+    var s = $('lg-status');
+    s.textContent = 'Publication…';
+    N.ecrire(DATA).then(function () {
+      marquer(false);
+      toast('Publié. Le site affiche vos changements pour tout le monde.');
+    }).catch(function (err) {
+      marquer(true);
+      toast(err.message || 'La publication a échoué. Vérifiez votre connexion Internet.');
+    }).then(function () { rendreListe(); });
   }
   function toast(msg) {
     var t = $('lg-toast');
@@ -154,15 +173,35 @@
     }).join('') : '<p class="lg-wines__empty">Aucune cuvée pour l’instant. Ajoutez-en une.</p>';
   }
   function lirePhoto(file) {
+    var pour = courant;                      // la fiche ouverte au moment du choix
     var reader = new FileReader();
     reader.onload = function () {
       var img = new Image();
       img.onload = function () {
-        var w = Math.min(1200, img.width), h = Math.round(img.height * w / img.width);
+        var w = Math.min(1400, img.width), h = Math.round(img.height * w / img.width);
         var c = document.createElement('canvas'); c.width = w; c.height = h;
         c.getContext('2d').drawImage(img, 0, 0, w, h);
-        courant.photo = c.toDataURL('image/jpeg', 0.82);
-        rendrePhoto(); marquer(true);
+
+        if (!EN_LIGNE) {                     // démonstration : l'image reste dans le navigateur
+          pour.photo = c.toDataURL('image/jpeg', 0.82);
+          if (pour === courant) rendrePhoto();
+          marquer(true);
+          return;
+        }
+        // En ligne : la photo part dans l'entrepôt, les données ne gardent qu'une adresse.
+        toast('Envoi de la photo…');
+        c.toBlob(function (blob) {
+          if (!blob) { toast('Cette image n’a pas pu être préparée.'); return; }
+          var nom = 'domaines/' + (pour.id || slug(pour.nom)) + '-' + Date.now() + '.jpg';
+          N.televerser(blob, nom).then(function (adresse) {
+            pour.photo = adresse;
+            if (pour === courant) rendrePhoto();
+            marquer(true);
+            toast('Photo envoyée. Cliquez sur Enregistrer pour la publier.');
+          }).catch(function (err) {
+            toast(err.message || 'L’envoi de la photo a échoué.');
+          });
+        }, 'image/jpeg', 0.82);
       };
       img.src = reader.result;
     };
@@ -191,10 +230,28 @@
   }
   function lireFichier(file) {
     if (file.type !== 'application/pdf') { toast('Seul un fichier PDF est accepté.'); return; }
-    if (file.size > 2 * 1024 * 1024) { toast('Fichier trop lourd pour la démonstration (2 Mo maximum).'); return; }
-    var reader = new FileReader();
-    reader.onload = function () { arrCourant.fichier = reader.result; arrCourant.fichierNom = file.name; rendreFichier(); marquer(true); };
-    reader.readAsDataURL(file);
+    if (file.size > 5 * 1024 * 1024) { toast('Fichier trop lourd (5 Mo maximum).'); return; }
+    var pour = arrCourant;
+    if (!EN_LIGNE) {
+      if (file.size > 2 * 1024 * 1024) { toast('En mode démonstration, 2 Mo maximum.'); return; }
+      var reader = new FileReader();
+      reader.onload = function () {
+        pour.fichier = reader.result; pour.fichierNom = file.name;
+        if (pour === arrCourant) rendreFichier();
+        marquer(true);
+      };
+      reader.readAsDataURL(file);
+      return;
+    }
+    toast('Envoi du fichier…');
+    N.televerser(file, 'arrivages/' + (pour.id || 'arrivage') + '-' + Date.now() + '.pdf').then(function (adresse) {
+      pour.fichier = adresse; pour.fichierNom = file.name;
+      if (pour === arrCourant) rendreFichier();
+      marquer(true);
+      toast('Fichier envoyé. Cliquez sur Enregistrer pour le publier.');
+    }).catch(function (err) {
+      toast(err.message || 'L’envoi du fichier a échoué.');
+    });
   }
   function apercuPdf() {
     var bin = window.LB_PDF.listeArrivages({ domaines: DATA.domaines, arrivages: DATA.arrivages }, { ids: [arrCourant.id], titre: arrCourant.titre });
@@ -379,17 +436,137 @@
     $('lg-save').addEventListener('click', enregistrer);
     $('lg-export').addEventListener('click', exporter);
     $('lg-reset').addEventListener('click', function () {
+      if (EN_LIGNE) { ouvrirHistorique(); return; }
       if (!confirm('Effacer toutes vos modifications et revenir à la version d’origine (25 domaines, arrivages d’exemple) ?')) return;
       try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* rien */ }
       DATA = charger(); courant = null; arrCourant = null; marquer(false); rendreRegions(); changerMode(mode);
       toast('Version d’origine rétablie.');
     });
+    var quitter = $('lg-logout');
+    if (quitter) quitter.addEventListener('click', function () {
+      if (sale && !confirm('Des modifications ne sont pas enregistrées. Se déconnecter quand même ?')) return;
+      sale = false;
+      N.deconnexion().then(function () { location.reload(); });
+    });
     window.addEventListener('beforeunload', function (e) { if (sale) { e.preventDefault(); e.returnValue = ''; } });
     document.addEventListener('keydown', function (e) { if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); enregistrer(); } });
   }
 
-  rendreRegions();
-  changerMode('domaines');
-  lier();
-  marquer(false);
+  /* ---------- Revenir à une version précédente (mode connecté) ---------- */
+  function ouvrirHistorique() {
+    var d = document.createElement('dialog');
+    d.className = 'lg-dialog';
+    d.innerHTML = '<h2>Revenir à une version précédente</h2>' +
+      '<p class="lg-help">Chaque enregistrement laisse une copie. Les 30 dernières sont gardées.</p>' +
+      '<div class="lg-versions">Chargement…</div>' +
+      '<div class="lg-dialog__actions"><button type="button" class="lg-btn lg-btn--ghost" value="fermer">Fermer</button></div>';
+    document.body.appendChild(d);
+    d.showModal();
+    d.querySelector('button[value="fermer"]').addEventListener('click', function () { d.close(); d.remove(); });
+
+    N.versions().then(function (liste) {
+      var boite = d.querySelector('.lg-versions');
+      if (!liste.length) { boite.textContent = 'Aucune version précédente pour l’instant.'; return; }
+      boite.innerHTML = liste.map(function (v) {
+        var q = new Date(v.cree_le);
+        return '<div class="lg-version"><span>' + esc(q.toLocaleString('fr-CA')) +
+          (v.cree_par ? ' <i>par ' + esc(v.cree_par) + '</i>' : '') +
+          '</span><button type="button" class="lg-btn lg-btn--ghost" data-v="' + v.id + '">Rétablir</button></div>';
+      }).join('');
+      boite.addEventListener('click', function (e) {
+        var b = e.target.closest('button[data-v]'); if (!b) return;
+        if (!confirm('Remplacer le contenu du site par cette version ? La version actuelle sera elle aussi gardée en historique.')) return;
+        b.disabled = true; b.textContent = 'Rétablissement…';
+        N.version(b.getAttribute('data-v')).then(function (donnees) {
+          if (!donnees) throw new Error('Version illisible.');
+          return N.ecrire(donnees).then(function () { return donnees; });
+        }).then(function (donnees) {
+          DATA = donnees; DATA.arrivages = DATA.arrivages || [];
+          courant = null; arrCourant = null;
+          d.close(); d.remove();
+          rendreRegions(); changerMode(mode); marquer(false);
+          toast('Version rétablie et publiée.');
+        }).catch(function (err) {
+          b.disabled = false; b.textContent = 'Rétablir';
+          toast(err.message || 'Le rétablissement a échoué.');
+        });
+      });
+    }).catch(function () {
+      d.querySelector('.lg-versions').textContent = 'L’historique n’a pas pu être lu.';
+    });
+  }
+
+  /* ---------- Écran de connexion ---------- */
+  function ecranConnexion() {
+    var voile = $('lg-login');
+    var form = $('lg-login-form');
+    var err = $('lg-login-error');
+    voile.hidden = false;
+    document.body.classList.add('is-locked');
+    form.elements.courriel.focus();
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      err.hidden = true;
+      var bouton = form.querySelector('button[type="submit"]');
+      bouton.disabled = true; bouton.textContent = 'Connexion…';
+      N.connexion(form.elements.courriel.value, form.elements.motdepasse.value).then(function () {
+        location.reload();
+      }).catch(function (ex) {
+        err.textContent = ex.message; err.hidden = false;
+        bouton.disabled = false; bouton.textContent = 'Entrer';
+        form.elements.motdepasse.value = '';
+        form.elements.motdepasse.focus();
+      });
+    });
+
+    $('lg-login-demo').addEventListener('click', function () {
+      voile.hidden = true;
+      document.body.classList.remove('is-locked');
+      demarrer(charger(), false);
+    });
+  }
+
+  /* ---------- Départ ---------- */
+  var lie = false;
+  function demarrer(donnees, enLigne) {
+    EN_LIGNE = !!enLigne;
+    DATA = donnees;
+    DATA.arrivages = DATA.arrivages || [];
+    document.body.classList.toggle('is-demo', !EN_LIGNE);
+    var bandeau = $('lg-bandeau');
+    if (bandeau) {
+      bandeau.hidden = EN_LIGNE;
+      var qui = $('lg-who');
+      if (qui) { qui.textContent = EN_LIGNE ? N.courriel() : ''; qui.hidden = !EN_LIGNE; }
+      var quitter = $('lg-logout');
+      if (quitter) quitter.hidden = !EN_LIGNE;
+    }
+    var reset = $('lg-reset');
+    if (reset) reset.textContent = EN_LIGNE ? 'Revenir à une version précédente' : 'Rétablir la version d’origine';
+    var exp = $('lg-export');
+    if (exp) exp.hidden = false;
+
+    rendreRegions();
+    changerMode('domaines');
+    if (!lie) { lier(); lie = true; }
+    marquer(false);
+  }
+
+  function amorcer() {
+    if (!N || !window.LB_CONFIG || !window.LB_CONFIG.url) {   // aucune base configurée
+      demarrer(charger(), false);
+      return;
+    }
+    if (!N.session()) { ecranConnexion(); return; }
+    N.pret()
+      .then(function () { return N.lire(); })
+      .then(function (d) { demarrer(d, true); })
+      .catch(function () {
+        N.deconnexion();
+        ecranConnexion();
+      });
+  }
+
+  amorcer();
 })();
