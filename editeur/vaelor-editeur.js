@@ -699,8 +699,12 @@
      ============================================================ */
   function demarrer() {
     if (!N || !N.session()) {
-      document.body.innerHTML = '<div class="vd-porte"><p>Pour modifier ce site, connectez-vous d’abord.</p>' +
-        '<p><a class="vd-b vd-b--plein" href="gestion.html">Aller à la page de gestion</a></p></div>';
+      var base = document.body.getAttribute('data-base') || '';
+      document.body.appendChild(el(
+        '<div class="vd-porte"><p><b>Cette page sert à modifier le site.</b></p>' +
+        '<p>Connectez-vous d’abord : c’est le même mot de passe que pour la gestion du catalogue.</p>' +
+        '<p><a class="vd-b vd-b--plein" href="' + base + 'gestion.html">Se connecter</a></p>' +
+        '<p><a class="vd-b" href="' + location.pathname + '">Revenir au site</a></p></div>'));
       return;
     }
     N.pret().then(function () { return N.lire(); }).then(function (d) {
